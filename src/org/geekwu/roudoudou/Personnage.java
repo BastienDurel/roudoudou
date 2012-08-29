@@ -1,5 +1,7 @@
 package org.geekwu.roudoudou;
 
+import java.util.List;
+
 public class Personnage {
 	String name;
 
@@ -19,4 +21,6 @@ public class Personnage {
 	Personnage(String name) {
 		this.name = name;
 	}
+	
+	List<Competence> competences;
 }
