@@ -26,6 +26,13 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.widgets.Label;
 
 /**
  * @author Bastien Durel
@@ -70,10 +77,10 @@ public class MainUI {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		Display display = Display.getDefault();
 		shlRoudoudou = new Shell();
-		shlRoudoudou.setSize(533, 407);
+		shlRoudoudou.setSize(553, 422);
 		shlRoudoudou.setText("Roudoudou");
+		shlRoudoudou.setLayout(new GridLayout(1, false));
 
 		Menu menu = new Menu(shlRoudoudou, SWT.BAR);
 		shlRoudoudou.setMenuBar(menu);
@@ -109,7 +116,20 @@ public class MainUI {
 		mntmHelp.setText("Help");
 
 		ToolBar toolBar = new ToolBar(shlRoudoudou, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
-		toolBar.setBounds(0, 0, 110, 35);
+		
+		ToolItem tltmNew = new ToolItem(toolBar, SWT.NONE);
+		tltmNew.setText("New");
+		
+		ToolItem tltmOpen = new ToolItem(toolBar, SWT.NONE);
+		tltmOpen.setText("Open");
+		
+		ToolItem tltmSave = new ToolItem(toolBar, SWT.NONE);
+		tltmSave.setEnabled(false);
+		tltmSave.setText("Save");
+		
+		RoudoudouSheet composite = new RoudoudouSheet(shlRoudoudou, SWT.NONE);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		
 
 	}
 
