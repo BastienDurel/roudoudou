@@ -11,6 +11,17 @@ public abstract class Entrainable implements Serializable {
 		this.value = value;
 		this.xp = 0;
 	}
+	/**
+	 * Sets default info to this object
+	 * @param value value for this object
+	 * @param xp xp for this object
+	 * @return this object
+	 */
+	Entrainable set(int value, int xp) {
+		this.value = value;
+		this.xp = xp;
+		return this;
+	}
 
 	/**
 	 * Add XP to object

@@ -48,6 +48,8 @@ public class Test {
 		p.empathie.set(10, 5);
 		p.reve.set(13, 5);
 		p.chance.set(11, 0);
+		
+		p.competences.add(Competence.Factory.tir("Tir à l'arc").set(7, 13));
 		return p;
 	}
 
