@@ -28,7 +28,7 @@ public abstract class Entrainable implements Serializable {
 	 */
 	public void addXP(int xp) {
 		this.xp += xp;
-		if (this.xp >= getNextStep()) {
+		while (this.xp >= getNextStep()) {
 			this.xp -= getNextStep();
 			this.value++;
 		}
