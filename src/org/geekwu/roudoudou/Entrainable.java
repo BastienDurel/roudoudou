@@ -1,6 +1,9 @@
 package org.geekwu.roudoudou;
 
-public abstract class Entrainable {
+import java.io.Serializable;
+
+public abstract class Entrainable implements Serializable {
+	private static final long serialVersionUID = 3380768181163591230L;
 	int value;
 	int xp;
 
@@ -34,5 +37,7 @@ public abstract class Entrainable {
 	 * @return needed XP
 	 */
 	public abstract int getNextStep();
+	
+	
 
 }
