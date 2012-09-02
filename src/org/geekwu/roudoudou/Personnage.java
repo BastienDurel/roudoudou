@@ -58,8 +58,9 @@ public class Personnage implements Serializable {
 	public String toString() {
 		StringBuilder b = new StringBuilder("org.geekwu.roudoudou.Personnage [" + name + "] beauté "
 				+ beaute);
-		if (vrai_revant == false) b.append(" Haut-rêvant");
-		
+		if (vrai_revant == false)
+			b.append(" Haut-rêvant");
+
 		b.append(System.lineSeparator() + " * Caractéristiques:");
 		b.append(System.lineSeparator() + " * Taille: " + taille.value);
 		b.append(System.lineSeparator() + " * Apparence: " + apparence.value);
@@ -99,5 +100,27 @@ public class Personnage implements Serializable {
 		Personnage newPersonnage = (Personnage) in.readObject();
 		in.close();
 		return newPersonnage;
+	}
+
+	public int getMelee() {
+		return (force.value + agilite.value) / 2;
+	}
+
+	public int getTir() {
+		return (dexterite.value + vue.value) / 2;
+	}
+
+	public int getLancer() {
+		return (getTir() + force.value) / 2;
+	}
+
+	public int getDerobee() {
+		return ((21 - taille.value) + agilite.value) / 2;
+	}
+
+	public int getCaracsPoints() {
+		return taille.value + apparence.value + constitution.value + force.value + agilite.value
+				+ dexterite.value + vue.value + ouie.value + odorat_gout.value + volonte.value
+				+ empathie.value + intellect.value + reve.value + chance.value + Math.max(0, beaute - 10);
 	}
 }

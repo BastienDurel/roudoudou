@@ -1,4 +1,5 @@
 package org.geekwu.roudoudou;
+
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
@@ -7,62 +8,105 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 
 /*
-  	Copyright © 2012 Bastien Durel
+ Copyright © 2012 Bastien Durel
 
-    This file is part of roudoudou.
+ This file is part of roudoudou.
 
-    myDobble is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ myDobble is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    myDobble is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ myDobble is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with myDobble.  If not, see <http://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU General Public License
+ along with myDobble.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
  * @author Bastien Durel
- *
+ * 
  */
 public class RoudoudouSheet extends Composite {
 
 	protected Personnage edited = null;
-	
+
 	private Text textName;
+
+	private Spinner spinnerBea;
+
+	private Spinner spinnerTai;
+
+	private Spinner spinnerVol;
+
+	private Spinner spinnerApp;
+
+	private Spinner spinnerInt;
+
+	private Spinner spinnerCon;
+
+	private Spinner spinnerEmp;
+
+	private Spinner spinnerFor;
+
+	private Spinner spinnerRev;
+
+	private Spinner spinnerAgi;
+
+	private Spinner spinnerCha;
+
+	private Spinner spinnerDex;
+
+	private Spinner spinnerVue;
+
+	private Spinner spinnerOui;
+
+	private Spinner spinnerOdo;
+
+	private Label labelDer;
+
+	private Label labelLan;
+
+	private Label labelTir;
+
+	private Label labelMel;
+
+	private Label labelPts;
 
 	/**
 	 * Create the composite.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
 	public RoudoudouSheet(Composite parent, int style) {
 		super(parent, style);
 		setLayout(new GridLayout(5, false));
-		
+
 		Label lblNom = new Label(this, SWT.NONE);
 		lblNom.setText("Nom");
-		
+
 		textName = new Text(this, SWT.BORDER);
 		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_END);
 		gridData.horizontalAlignment = SWT.FILL;
 		gridData.verticalAlignment = SWT.FILL;
 		gridData.horizontalSpan = 4;
 		textName.setLayoutData(gridData);
-		
+
 		Label label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData gridData2 = new GridData(GridData.VERTICAL_ALIGN_END);
 		gridData2.horizontalAlignment = SWT.FILL;
 		gridData2.verticalAlignment = SWT.FILL;
 		gridData2.horizontalSpan = 5;
 		label.setLayoutData(gridData2);
-		
+
 		Label lblCaractristiques = new Label(this, SWT.NONE);
 		lblCaractristiques.setFont(SWTResourceManager.getFont("Cantarell", 12, SWT.BOLD));
 		lblCaractristiques.setText("Caractéristiques");
@@ -71,156 +115,323 @@ public class RoudoudouSheet extends Composite {
 		gridData3.verticalAlignment = SWT.FILL;
 		gridData3.horizontalSpan = 2;
 		lblCaractristiques.setLayoutData(gridData3);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
 		
+		labelPts = new Label(this, SWT.NONE);
+		labelPts.setAlignment(SWT.RIGHT);
+		GridData gridData4 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gridData4.horizontalAlignment = SWT.FILL;
+		gridData4.verticalAlignment = SWT.FILL;
+		gridData4.horizontalSpan = 3;
+		labelPts.setLayoutData(gridData4);
+		labelPts.setText("0");
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
+
 		Label lblbeaut = new Label(this, SWT.NONE);
 		lblbeaut.setText("(Beauté)");
 		new Label(this, SWT.NONE);
-		
-		Spinner spinnerBea = new Spinner(this, SWT.BORDER);
+
+		spinnerBea = new Spinner(this, SWT.BORDER);
 		spinnerBea.setMaximum(18);
 		spinnerBea.setMinimum(3);
 		spinnerBea.setSelection(10);
-		
+
 		Label lblTaille = new Label(this, SWT.NONE);
 		lblTaille.setText("TAILLE");
-		
-		Spinner spinnerTai = new Spinner(this, SWT.BORDER);
+
+		spinnerTai = new Spinner(this, SWT.BORDER);
+		spinnerTai.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.taille.value = spinnerTai.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerTai.setMaximum(15);
 		spinnerTai.setMinimum(6);
-		
+
 		Label lblVolont = new Label(this, SWT.NONE);
 		lblVolont.setText("VOLONTÉ");
 		new Label(this, SWT.NONE);
-		
-		Spinner spinnerVol = new Spinner(this, SWT.BORDER);
+
+		spinnerVol = new Spinner(this, SWT.BORDER);
+		spinnerVol.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.volonte.value = spinnerVol.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerVol.setMaximum(15);
 		spinnerVol.setMinimum(6);
-		
+
 		Label lblApparence = new Label(this, SWT.NONE);
 		lblApparence.setText("APPARENCE");
-		
-		Spinner spinnerApp = new Spinner(this, SWT.BORDER);
+
+		spinnerApp = new Spinner(this, SWT.BORDER);
+		spinnerApp.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.apparence.value = spinnerApp.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerApp.setMaximum(15);
 		spinnerApp.setMinimum(6);
-		
+
 		Label lblIntellect = new Label(this, SWT.NONE);
 		lblIntellect.setText("INTELLECT");
 		new Label(this, SWT.NONE);
-		
-		Spinner spinnerInt = new Spinner(this, SWT.BORDER);
+
+		spinnerInt = new Spinner(this, SWT.BORDER);
+		spinnerInt.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.intellect.value = spinnerInt.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerInt.setMaximum(15);
 		spinnerInt.setMinimum(6);
-		
+
 		Label lblConstitution = new Label(this, SWT.NONE);
 		lblConstitution.setText("CONSTITUTION");
-		
-		Spinner spinnerCon = new Spinner(this, SWT.BORDER);
+
+		spinnerCon = new Spinner(this, SWT.BORDER);
+		spinnerCon.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.constitution.value = spinnerCon.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerCon.setMaximum(15);
 		spinnerCon.setMinimum(6);
-		
+
 		Label lblEmathie = new Label(this, SWT.NONE);
 		lblEmathie.setText("EMATHIE");
 		new Label(this, SWT.NONE);
-		
-		Spinner spinnerEmp = new Spinner(this, SWT.BORDER);
+
+		spinnerEmp = new Spinner(this, SWT.BORDER);
+		spinnerEmp.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.empathie.value = spinnerEmp.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerEmp.setMaximum(15);
 		spinnerEmp.setMinimum(6);
-		
+
 		Label lblForce = new Label(this, SWT.NONE);
 		lblForce.setText("FORCE");
-		
-		Spinner spinnerFor = new Spinner(this, SWT.BORDER);
+
+		spinnerFor = new Spinner(this, SWT.BORDER);
+		spinnerFor.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.force.value = spinnerFor.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerFor.setMaximum(15);
 		spinnerFor.setMinimum(6);
-		
+
 		Label lblRve = new Label(this, SWT.NONE);
 		lblRve.setText("RÊVE");
 		new Label(this, SWT.NONE);
-		
-		Spinner spinnerRev = new Spinner(this, SWT.BORDER);
+
+		spinnerRev = new Spinner(this, SWT.BORDER);
+		spinnerRev.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.reve.value = spinnerRev.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerRev.setMaximum(15);
 		spinnerRev.setMinimum(6);
-		
+
 		Label lblAgilit = new Label(this, SWT.NONE);
 		lblAgilit.setText("AGILITÉ");
-		
-		Spinner spinnerAgi = new Spinner(this, SWT.BORDER);
+
+		spinnerAgi = new Spinner(this, SWT.BORDER);
+		spinnerAgi.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.agilite.value = spinnerAgi.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerAgi.setMaximum(15);
 		spinnerAgi.setMinimum(6);
-		
+
 		Label lblChance = new Label(this, SWT.NONE);
 		lblChance.setText("CHANCE");
 		new Label(this, SWT.NONE);
-		
-		Spinner spinnerCha = new Spinner(this, SWT.BORDER);
+
+		spinnerCha = new Spinner(this, SWT.BORDER);
+		spinnerCha.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.chance.value = spinnerCha.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerCha.setMaximum(15);
 		spinnerCha.setMinimum(6);
-		
+
 		Label lblDextrit = new Label(this, SWT.NONE);
 		lblDextrit.setText("DEXTÉRITÉ");
-		
-		Spinner spinnerDex = new Spinner(this, SWT.BORDER);
+
+		spinnerDex = new Spinner(this, SWT.BORDER);
+		spinnerDex.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.dexterite.value = spinnerDex.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerDex.setMaximum(15);
 		spinnerDex.setMinimum(6);
-		
-		Label lblMle = new Label(this, SWT.NONE);
-		lblMle.setText("Mêlée");
+
+		Label lbl_10_3 = new Label(this, SWT.NONE);
+		lbl_10_3.setText("Mêlée");
 		new Label(this, SWT.NONE);
-		
-		Label label_1 = new Label(this, SWT.NONE);
-		label_1.setText("0");
-		
+
+		labelMel = new Label(this, SWT.NONE);
+		labelMel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelMel.setText("0");
+
 		Label lblVue = new Label(this, SWT.NONE);
 		lblVue.setText("VUE");
-		
-		Spinner spinnerVue = new Spinner(this, SWT.BORDER);
+
+		spinnerVue = new Spinner(this, SWT.BORDER);
+		spinnerVue.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.vue.value = spinnerVue.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerVue.setMaximum(15);
 		spinnerVue.setMinimum(6);
-		
-		Label lblTir = new Label(this, SWT.NONE);
-		lblTir.setText("Tir");
+
+		Label lbl_11_3 = new Label(this, SWT.NONE);
+		lbl_11_3.setText("Tir");
 		new Label(this, SWT.NONE);
-		
-		Label label_2 = new Label(this, SWT.NONE);
-		label_2.setText("0");
-		
+
+		labelTir = new Label(this, SWT.NONE);
+		labelTir.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelTir.setText("0");
+
 		Label lblOue = new Label(this, SWT.NONE);
 		lblOue.setText("OUÏE");
-		
-		Spinner spinnerOui = new Spinner(this, SWT.BORDER);
+
+		spinnerOui = new Spinner(this, SWT.BORDER);
+		spinnerOui.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.ouie.value = spinnerOui.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerOui.setMaximum(15);
 		spinnerOui.setMinimum(6);
-		
-		Label lblLancer = new Label(this, SWT.NONE);
-		lblLancer.setText("Lancer");
+
+		Label lbl_12_3 = new Label(this, SWT.NONE);
+		lbl_12_3.setText("Lancer");
 		new Label(this, SWT.NONE);
-		
-		Label lblNewLabel = new Label(this, SWT.NONE);
-		lblNewLabel.setText("0");
-		
+
+		labelLan = new Label(this, SWT.NONE);
+		labelLan.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelLan.setText("0");
+
 		Label lblOdoratgot = new Label(this, SWT.NONE);
 		lblOdoratgot.setText("ODORAT-GOÛT");
-		
-		Spinner spinnerOdo = new Spinner(this, SWT.BORDER);
+
+		spinnerOdo = new Spinner(this, SWT.BORDER);
+		spinnerOdo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.odorat_gout.value = spinnerOdo.getSelection();
+				updatePerso();
+			}
+		});
 		spinnerOdo.setMaximum(15);
 		spinnerOdo.setMinimum(6);
-		
-		Label lblDrobe = new Label(this, SWT.NONE);
-		lblDrobe.setText("Dérobée");
+
+		Label lbl_13_3 = new Label(this, SWT.NONE);
+		lbl_13_3.setText("Dérobée");
 		new Label(this, SWT.NONE);
-		
-		Label label_3 = new Label(this, SWT.NONE);
-		label_3.setText("0");
+
+		labelDer = new Label(this, SWT.NONE);
+		labelDer.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelDer.setText("0");
 
 	}
 
 	@Override
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
+	}
+
+	/**
+	 * 
+	 */
+	void updatePerso() {
+		if (edited == null)
+			return;
+		textName.setText(edited.name);
+		labelMel.setText(Integer.toString(edited.getMelee()));
+		labelTir.setText(Integer.toString(edited.getTir()));
+		labelLan.setText(Integer.toString(edited.getLancer()));
+		labelDer.setText(Integer.toString(edited.getDerobee()));
+		spinnerBea.setSelection(edited.beaute);
+		spinnerTai.setSelection(edited.taille.value);
+		spinnerVol.setSelection(edited.volonte.value);
+		spinnerApp.setSelection(edited.apparence.value);
+		spinnerInt.setSelection(edited.intellect.value);
+		spinnerCon.setSelection(edited.constitution.value);
+		spinnerEmp.setSelection(edited.empathie.value);
+		spinnerFor.setSelection(edited.force.value);
+		spinnerRev.setSelection(edited.reve.value);
+		spinnerAgi.setSelection(edited.agilite.value);
+		spinnerCha.setSelection(edited.chance.value);
+		spinnerDex.setSelection(edited.dexterite.value);
+		spinnerVue.setSelection(edited.vue.value);
+		spinnerOui.setSelection(edited.ouie.value);
+		spinnerOdo.setSelection(edited.odorat_gout.value);
+		labelPts.setText("(" + edited.getCaracsPoints() + " points)");
+		
+		spinnerFor.setMaximum(Math.min(spinnerTai.getSelection() + 4, 15));
 	}
 }

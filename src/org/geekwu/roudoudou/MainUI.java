@@ -30,6 +30,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.widgets.Label;
 
 /**
  * @author Bastien Durel
@@ -115,6 +116,12 @@ public class MainUI {
 		ToolBar toolBar = new ToolBar(shlRoudoudou, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
 		
 		ToolItem tltmNew = new ToolItem(toolBar, SWT.NONE);
+		tltmNew.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				onNew();
+			}
+		});
 		tltmNew.setText("New");
 		
 		ToolItem tltmOpen = new ToolItem(toolBar, SWT.NONE);
@@ -130,6 +137,54 @@ public class MainUI {
 		scrolledComposite.setExpandVertical(true);
 		
 		compositeSheet = new RoudoudouSheet(scrolledComposite, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
+		new Label(compositeSheet, SWT.NONE);
 		scrolledComposite.setContent(compositeSheet);
 		scrolledComposite.setMinSize(compositeSheet.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		
@@ -156,6 +211,7 @@ public class MainUI {
 	protected void onNew() {
 		if (checkSave()) {
 			compositeSheet.edited = new Personnage("unnamed");
+			compositeSheet.updatePerso();
 		}
 	}
 }
