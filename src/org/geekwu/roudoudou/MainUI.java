@@ -26,13 +26,10 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.custom.ScrolledComposite;
-import org.eclipse.swt.widgets.Label;
 
 /**
  * @author Bastien Durel
@@ -42,7 +39,7 @@ public class MainUI {
 
 	protected Shell shlRoudoudou;
 
-	protected Personnage edited = null;
+	protected RoudoudouSheet compositeSheet;
 
 	/**
 	 * Launch the application.
@@ -127,8 +124,14 @@ public class MainUI {
 		tltmSave.setEnabled(false);
 		tltmSave.setText("Save");
 		
-		RoudoudouSheet composite = new RoudoudouSheet(shlRoudoudou, SWT.NONE);
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		ScrolledComposite scrolledComposite = new ScrolledComposite(shlRoudoudou, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);
+		
+		compositeSheet = new RoudoudouSheet(scrolledComposite, SWT.NONE);
+		scrolledComposite.setContent(compositeSheet);
+		scrolledComposite.setMinSize(compositeSheet.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		
 
 	}
@@ -138,7 +141,7 @@ public class MainUI {
 	}
 
 	protected boolean checkSave(boolean cancel) {
-		if (edited != null) {
+		if (compositeSheet.edited != null) {
 
 		}
 		return true;
@@ -152,7 +155,7 @@ public class MainUI {
 
 	protected void onNew() {
 		if (checkSave()) {
-			edited = new Personnage("unnamed");
+			compositeSheet.edited = new Personnage("unnamed");
 		}
 	}
 }
