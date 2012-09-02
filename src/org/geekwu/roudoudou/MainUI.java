@@ -18,6 +18,9 @@
  */
 package org.geekwu.roudoudou;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -31,6 +34,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Label;
+import org.geekwu.roudoudou.ui.CaracFinishedEvent;
+import org.geekwu.roudoudou.ui.RoudoudouEvent;
+import org.geekwu.roudoudou.ui.RoudoudouListener;
 
 /**
  * @author Bastien Durel
@@ -54,6 +60,31 @@ public class MainUI {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	protected static Map<Class<?>, RoudoudouListener> roudoudouListners = new HashMap<Class<?>, RoudoudouListener>();
+
+	protected static class RoudoudouRunnable implements Runnable {
+		RoudoudouEvent event;
+
+		RoudoudouRunnable(RoudoudouEvent e) {
+			event = e;
+		}
+
+		@Override
+		public void run() {
+			if (roudoudouListners.containsKey(event.getClass())) {
+				roudoudouListners.get(event.getClass()).handle(event);
+			}
+		}
+	}
+
+	public static void fireRoudoudouEvent(RoudoudouEvent event) {
+		Display.getDefault().asyncExec(new RoudoudouRunnable(event));
+	}
+	
+	public static void addRoudoudouListener(Class<?> c, RoudoudouListener listener) {
+		roudoudouListners.put(c, listener);
 	}
 
 	/**
@@ -114,7 +145,7 @@ public class MainUI {
 		mntmHelp.setText("Help");
 
 		ToolBar toolBar = new ToolBar(shlRoudoudou, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
-		
+
 		ToolItem tltmNew = new ToolItem(toolBar, SWT.NONE);
 		tltmNew.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -123,19 +154,20 @@ public class MainUI {
 			}
 		});
 		tltmNew.setText("New");
-		
+
 		ToolItem tltmOpen = new ToolItem(toolBar, SWT.NONE);
 		tltmOpen.setText("Open");
-		
+
 		ToolItem tltmSave = new ToolItem(toolBar, SWT.NONE);
 		tltmSave.setEnabled(false);
 		tltmSave.setText("Save");
-		
-		ScrolledComposite scrolledComposite = new ScrolledComposite(shlRoudoudou, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+
+		ScrolledComposite scrolledComposite = new ScrolledComposite(shlRoudoudou, SWT.BORDER
+				| SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
-		
+
 		compositeSheet = new RoudoudouSheet(scrolledComposite, SWT.NONE);
 		new Label(compositeSheet, SWT.NONE);
 		new Label(compositeSheet, SWT.NONE);
@@ -187,7 +219,15 @@ public class MainUI {
 		new Label(compositeSheet, SWT.NONE);
 		scrolledComposite.setContent(compositeSheet);
 		scrolledComposite.setMinSize(compositeSheet.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		
+
+		addRoudoudouListener(CaracFinishedEvent.class, new RoudoudouListener() {
+
+			@Override
+			public void handle(RoudoudouEvent event) {
+				System.out.println("there ...");
+				compositeSheet.dispose();
+			}
+		});
 
 	}
 

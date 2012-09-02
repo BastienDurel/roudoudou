@@ -10,6 +10,8 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
+import org.geekwu.roudoudou.ui.CaracFinishedEvent;
 
 /*
  Copyright © 2012 Bastien Durel
@@ -83,6 +85,8 @@ public class RoudoudouSheet extends Composite {
 	private Label labelInfos;
 
 	private Label labelInfos2;
+
+	private Button btnEnregistrer;
 
 	/**
 	 * Create the composite.
@@ -432,7 +436,29 @@ public class RoudoudouSheet extends Composite {
 		gridDatainfos2.verticalAlignment = SWT.FILL;
 		gridDatainfos2.horizontalSpan = 5;
 		labelInfos2.setLayoutData(gridDatainfos2);
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
 
+		btnEnregistrer = new Button(this, SWT.NONE);
+		btnEnregistrer.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				onValid();
+			}
+		});
+		btnEnregistrer.setText("Enregistrer");
+
+	}
+
+	/**
+	 * 
+	 */
+	protected void onValid() {
+		if (edited.getCaracsPoints() == 160) {
+			MainUI.fireRoudoudouEvent(new CaracFinishedEvent(edited));
+		}
 	}
 
 	@Override
@@ -473,5 +499,6 @@ public class RoudoudouSheet extends Composite {
 				+ edited.getEncombrement());
 
 		spinnerFor.setMaximum(Math.min(spinnerTai.getSelection() + 4, 15));
+		btnEnregistrer.setEnabled(edited.getCaracsPoints() == 160);
 	}
 }
