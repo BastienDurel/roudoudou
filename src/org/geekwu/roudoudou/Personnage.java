@@ -118,9 +118,73 @@ public class Personnage implements Serializable {
 		return ((21 - taille.value) + agilite.value) / 2;
 	}
 
+	/**
+	 * Calcule le nombre de points de caractéristique du perso (utile à la
+	 * création)
+	 * 
+	 * @return points de caractéristique
+	 */
 	public int getCaracsPoints() {
 		return taille.value + apparence.value + constitution.value + force.value + agilite.value
 				+ dexterite.value + vue.value + ouie.value + odorat_gout.value + volonte.value
 				+ empathie.value + intellect.value + reve.value + chance.value + Math.max(0, beaute - 10);
+	}
+
+	/**
+	 * @return Les points de vie du personnage
+	 */
+	public int getVie() {
+		return Math.round((float) (taille.value + constitution.value) / 2f);
+	}
+
+	/**
+	 * @return L'endurance du personnage
+	 */
+	public int getEndurance() {
+		return Math.max(taille.value + constitution.value, getVie() + volonte.value);
+	}
+
+	/**
+	 * @return Le seuil de constitution du personnage
+	 */
+	public int getSeuilConstitution() {
+		if (constitution.value < 9)
+			return 2;
+		if (constitution.value < 12)
+			return 3;
+		if (constitution.value < 15)
+			return 4;
+		return 5;
+	}
+
+	/**
+	 * @return Les points de sustantation nécessaires au personnage
+	 */
+	public int getSust() {
+		if (constitution.value < 10)
+			return 2;
+		if (constitution.value < 14)
+			return 3;
+		return 4;
+	}
+
+	/**
+	 * @return Le +Dom personnel du personnage
+	 */
+	public int getPlusdom() {
+		if (constitution.value < 8)
+			return -1;
+		if (constitution.value < 12)
+			return 0;
+		if (constitution.value < 14)
+			return 1;
+		return 2;
+	}
+
+	/**
+	 * @return L'encombrement du personnage
+	 */
+	public float getEncombrement() {
+		return (taille.value + force.value) / 2;
 	}
 }

@@ -80,6 +80,10 @@ public class RoudoudouSheet extends Composite {
 
 	private Label labelPts;
 
+	private Label labelInfos;
+
+	private Label labelInfos2;
+
 	/**
 	 * Create the composite.
 	 * 
@@ -94,6 +98,14 @@ public class RoudoudouSheet extends Composite {
 		lblNom.setText("Nom");
 
 		textName = new Text(this, SWT.BORDER);
+		textName.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.name = textName.getText();
+			}
+		});
 		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_END);
 		gridData.horizontalAlignment = SWT.FILL;
 		gridData.verticalAlignment = SWT.FILL;
@@ -115,7 +127,7 @@ public class RoudoudouSheet extends Composite {
 		gridData3.verticalAlignment = SWT.FILL;
 		gridData3.horizontalSpan = 2;
 		lblCaractristiques.setLayoutData(gridData3);
-		
+
 		labelPts = new Label(this, SWT.NONE);
 		labelPts.setAlignment(SWT.RIGHT);
 		GridData gridData4 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
@@ -132,9 +144,18 @@ public class RoudoudouSheet extends Composite {
 		new Label(this, SWT.NONE);
 
 		spinnerBea = new Spinner(this, SWT.BORDER);
-		spinnerBea.setMaximum(18);
+		spinnerBea.setMaximum(16);
 		spinnerBea.setMinimum(3);
 		spinnerBea.setSelection(10);
+		spinnerBea.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (edited == null)
+					return;
+				edited.beaute = spinnerBea.getSelection();
+				updatePerso();
+			}
+		});
 
 		Label lblTaille = new Label(this, SWT.NONE);
 		lblTaille.setText("TAILLE");
@@ -397,6 +418,21 @@ public class RoudoudouSheet extends Composite {
 		labelDer.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		labelDer.setText("0");
 
+		labelInfos = new Label(this, SWT.NONE);
+		labelInfos.setText("Informations calculées");
+		GridData gridDatainfos = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gridDatainfos.horizontalAlignment = SWT.FILL;
+		gridDatainfos.verticalAlignment = SWT.FILL;
+		gridDatainfos.horizontalSpan = 5;
+		labelInfos.setLayoutData(gridDatainfos);
+
+		labelInfos2 = new Label(this, SWT.NONE);
+		GridData gridDatainfos2 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		gridDatainfos2.horizontalAlignment = SWT.FILL;
+		gridDatainfos2.verticalAlignment = SWT.FILL;
+		gridDatainfos2.horizontalSpan = 5;
+		labelInfos2.setLayoutData(gridDatainfos2);
+
 	}
 
 	@Override
@@ -431,7 +467,11 @@ public class RoudoudouSheet extends Composite {
 		spinnerOui.setSelection(edited.ouie.value);
 		spinnerOdo.setSelection(edited.odorat_gout.value);
 		labelPts.setText("(" + edited.getCaracsPoints() + " points)");
-		
+		labelInfos.setText("Vie: " + edited.getVie() + " End: " + edited.getEndurance() + " S. Const:"
+				+ edited.getSeuilConstitution() + " Sust: " + edited.getSeuilConstitution());
+		labelInfos2.setText("+Dom: " + edited.getPlusdom() + " Encombrement: "
+				+ edited.getEncombrement());
+
 		spinnerFor.setMaximum(Math.min(spinnerTai.getSelection() + 4, 15));
 	}
 }
