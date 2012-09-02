@@ -81,67 +81,92 @@ public class RoudoudouSheet extends Composite {
 		lblbeaut.setText("(Beauté)");
 		new Label(this, SWT.NONE);
 		
-		Spinner spinner_12 = new Spinner(this, SWT.BORDER);
+		Spinner spinnerBea = new Spinner(this, SWT.BORDER);
+		spinnerBea.setMaximum(18);
+		spinnerBea.setMinimum(3);
+		spinnerBea.setSelection(10);
 		
 		Label lblTaille = new Label(this, SWT.NONE);
 		lblTaille.setText("TAILLE");
 		
-		Spinner spinnerTaille = new Spinner(this, SWT.BORDER);
+		Spinner spinnerTai = new Spinner(this, SWT.BORDER);
+		spinnerTai.setMaximum(15);
+		spinnerTai.setMinimum(6);
 		
 		Label lblVolont = new Label(this, SWT.NONE);
 		lblVolont.setText("VOLONTÉ");
 		new Label(this, SWT.NONE);
 		
-		Spinner spinnerVolonte = new Spinner(this, SWT.BORDER);
+		Spinner spinnerVol = new Spinner(this, SWT.BORDER);
+		spinnerVol.setMaximum(15);
+		spinnerVol.setMinimum(6);
 		
 		Label lblApparence = new Label(this, SWT.NONE);
 		lblApparence.setText("APPARENCE");
 		
-		Spinner spinner = new Spinner(this, SWT.BORDER);
+		Spinner spinnerApp = new Spinner(this, SWT.BORDER);
+		spinnerApp.setMaximum(15);
+		spinnerApp.setMinimum(6);
 		
 		Label lblIntellect = new Label(this, SWT.NONE);
 		lblIntellect.setText("INTELLECT");
 		new Label(this, SWT.NONE);
 		
-		Spinner spinner_8 = new Spinner(this, SWT.BORDER);
+		Spinner spinnerInt = new Spinner(this, SWT.BORDER);
+		spinnerInt.setMaximum(15);
+		spinnerInt.setMinimum(6);
 		
 		Label lblConstitution = new Label(this, SWT.NONE);
 		lblConstitution.setText("CONSTITUTION");
 		
-		Spinner spinner_1 = new Spinner(this, SWT.BORDER);
+		Spinner spinnerCon = new Spinner(this, SWT.BORDER);
+		spinnerCon.setMaximum(15);
+		spinnerCon.setMinimum(6);
 		
 		Label lblEmathie = new Label(this, SWT.NONE);
 		lblEmathie.setText("EMATHIE");
 		new Label(this, SWT.NONE);
 		
-		Spinner spinner_9 = new Spinner(this, SWT.BORDER);
+		Spinner spinnerEmp = new Spinner(this, SWT.BORDER);
+		spinnerEmp.setMaximum(15);
+		spinnerEmp.setMinimum(6);
 		
 		Label lblForce = new Label(this, SWT.NONE);
 		lblForce.setText("FORCE");
 		
-		Spinner spinner_2 = new Spinner(this, SWT.BORDER);
+		Spinner spinnerFor = new Spinner(this, SWT.BORDER);
+		spinnerFor.setMaximum(15);
+		spinnerFor.setMinimum(6);
 		
 		Label lblRve = new Label(this, SWT.NONE);
 		lblRve.setText("RÊVE");
 		new Label(this, SWT.NONE);
 		
-		Spinner spinner_10 = new Spinner(this, SWT.BORDER);
+		Spinner spinnerRev = new Spinner(this, SWT.BORDER);
+		spinnerRev.setMaximum(15);
+		spinnerRev.setMinimum(6);
 		
 		Label lblAgilit = new Label(this, SWT.NONE);
 		lblAgilit.setText("AGILITÉ");
 		
-		Spinner spinner_3 = new Spinner(this, SWT.BORDER);
+		Spinner spinnerAgi = new Spinner(this, SWT.BORDER);
+		spinnerAgi.setMaximum(15);
+		spinnerAgi.setMinimum(6);
 		
 		Label lblChance = new Label(this, SWT.NONE);
 		lblChance.setText("CHANCE");
 		new Label(this, SWT.NONE);
 		
-		Spinner spinner_11 = new Spinner(this, SWT.BORDER);
+		Spinner spinnerCha = new Spinner(this, SWT.BORDER);
+		spinnerCha.setMaximum(15);
+		spinnerCha.setMinimum(6);
 		
 		Label lblDextrit = new Label(this, SWT.NONE);
 		lblDextrit.setText("DEXTÉRITÉ");
 		
-		Spinner spinner_4 = new Spinner(this, SWT.BORDER);
+		Spinner spinnerDex = new Spinner(this, SWT.BORDER);
+		spinnerDex.setMaximum(15);
+		spinnerDex.setMinimum(6);
 		
 		Label lblMle = new Label(this, SWT.NONE);
 		lblMle.setText("Mêlée");
@@ -153,7 +178,9 @@ public class RoudoudouSheet extends Composite {
 		Label lblVue = new Label(this, SWT.NONE);
 		lblVue.setText("VUE");
 		
-		Spinner spinner_5 = new Spinner(this, SWT.BORDER);
+		Spinner spinnerVue = new Spinner(this, SWT.BORDER);
+		spinnerVue.setMaximum(15);
+		spinnerVue.setMinimum(6);
 		
 		Label lblTir = new Label(this, SWT.NONE);
 		lblTir.setText("Tir");
@@ -165,7 +192,9 @@ public class RoudoudouSheet extends Composite {
 		Label lblOue = new Label(this, SWT.NONE);
 		lblOue.setText("OUÏE");
 		
-		Spinner spinner_6 = new Spinner(this, SWT.BORDER);
+		Spinner spinnerOui = new Spinner(this, SWT.BORDER);
+		spinnerOui.setMaximum(15);
+		spinnerOui.setMinimum(6);
 		
 		Label lblLancer = new Label(this, SWT.NONE);
 		lblLancer.setText("Lancer");
@@ -177,7 +206,9 @@ public class RoudoudouSheet extends Composite {
 		Label lblOdoratgot = new Label(this, SWT.NONE);
 		lblOdoratgot.setText("ODORAT-GOÛT");
 		
-		Spinner spinner_7 = new Spinner(this, SWT.BORDER);
+		Spinner spinnerOdo = new Spinner(this, SWT.BORDER);
+		spinnerOdo.setMaximum(15);
+		spinnerOdo.setMinimum(6);
 		
 		Label lblDrobe = new Label(this, SWT.NONE);
 		lblDrobe.setText("Dérobée");
