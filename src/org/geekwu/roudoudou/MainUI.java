@@ -34,7 +34,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.geekwu.roudoudou.ui.CaracFinishedEvent;
-import org.geekwu.roudoudou.ui.PersoEvent;
+import org.geekwu.roudoudou.ui.CompFinishedEvent;
 import org.geekwu.roudoudou.ui.RoudoudouEvent;
 import org.geekwu.roudoudou.ui.RoudoudouListener;
 
@@ -176,14 +176,20 @@ public class MainUI {
 
 			@Override
 			public void handle(RoudoudouEvent event) {
-				System.out.println("there ...");
-				if (compositeSheet != null && event instanceof PersoEvent) {
+				if (compositeSheet != null) {
 					compositeSheet.getComposite().dispose();
-					if (compositeSheet instanceof RoudoudouCaracSheet) {
-						caracToComp();
-					} else {
-						compositeSheet = null;
-					}
+					caracToComp();
+				}
+			}
+		});
+		addRoudoudouListener(CompFinishedEvent.class, new RoudoudouListener() {
+
+			@Override
+			public void handle(RoudoudouEvent event) {
+				if (compositeSheet != null) {
+					compositeSheet.getComposite().dispose();
+					compositeSheet = null;
+					// TODO: liveSheet
 				}
 			}
 		});
@@ -214,18 +220,21 @@ public class MainUI {
 
 			compositeSheet = new RoudoudouCaracSheet(scrolledComposite, SWT.NONE);
 			scrolledComposite.setContent(compositeSheet.getComposite());
-			scrolledComposite.setMinSize(compositeSheet.getComposite().computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			scrolledComposite.setMinSize(compositeSheet.getComposite().computeSize(SWT.DEFAULT,
+					SWT.DEFAULT));
 
 			compositeSheet.setEdited(new Personnage("unnamed"));
 			compositeSheet.updatePerso();
 		}
 	}
+
 	protected void caracToComp() {
 		Personnage perso = compositeSheet.getEdited();
 		compositeSheet = new RoudoudouCompSheet(scrolledComposite, SWT.NONE);
 		compositeSheet.setEdited(perso);
 		scrolledComposite.setContent(compositeSheet.getComposite());
-		scrolledComposite.setMinSize(compositeSheet.getComposite().computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrolledComposite.setMinSize(compositeSheet.getComposite()
+				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		compositeSheet.updatePerso();
 	}
 }

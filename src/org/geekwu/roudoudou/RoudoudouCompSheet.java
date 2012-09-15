@@ -38,6 +38,7 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.geekwu.roudoudou.ui.CompFinishedEvent;
 import org.geekwu.roudoudou.ui.CompSelector;
 import org.eclipse.swt.widgets.Button;
 
@@ -261,6 +262,12 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		lblStatus.setText("Status");
 
 		btnSauver = new Button(composite, SWT.NONE);
+		btnSauver.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				MainUI.fireRoudoudouEvent(new CompFinishedEvent(edited));
+			}
+		});
 		btnSauver.setEnabled(false);
 		btnSauver.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		btnSauver.setText("Sauver");
