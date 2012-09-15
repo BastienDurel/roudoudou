@@ -20,18 +20,31 @@ package org.geekwu.roudoudou;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import swing2swt.layout.BorderLayout;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 /**
  * @author Bastien Durel
  *
  */
 public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
+
+	/**
+	 * @author Bastien Durel
+	 *
+	 */
+	public enum CompType {
+		COMBAT, GENERALE, PARTICULIERE, SPECIALISEE, CONNAISSANCE, DRACONIC
+	}
+
+
 
 	protected Personnage edited = null;
 	private Label lblPerso;
@@ -68,6 +81,12 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		lblComptencesDeTir.setText("Compétences Générales");
 		
 		tableComb = new Table(composite, SWT.BORDER | SWT.FULL_SELECTION);
+		tableComb.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+				selectNewComp(tableComb, CompType.COMBAT);
+			}
+		});
 		tableComb.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tableComb.setHeaderVisible(true);
 		tableComb.setLinesVisible(true);
@@ -88,6 +107,12 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		tableGene.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tableGene.setHeaderVisible(true);
 		tableGene.setLinesVisible(true);
+		tableGene.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+				selectNewComp(tableGene, CompType.GENERALE);
+			}
+		});
 		
 		TableColumn tableColumn = new TableColumn(tableGene, SWT.NONE);
 		tableColumn.setWidth(150);
@@ -115,6 +140,12 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		tablePart.setLayoutData(gd_tablePart);
 		tablePart.setHeaderVisible(true);
 		tablePart.setLinesVisible(true);
+		tablePart.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+				selectNewComp(tablePart, CompType.PARTICULIERE);
+			}
+		});
 		
 		TableColumn tableColumn_3 = new TableColumn(tablePart, SWT.NONE);
 		tableColumn_3.setWidth(150);
@@ -132,6 +163,12 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		tableSpe.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tableSpe.setHeaderVisible(true);
 		tableSpe.setLinesVisible(true);
+		tableSpe.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+				selectNewComp(tableSpe, CompType.SPECIALISEE);
+			}
+		});
 		
 		TableColumn tableColumn_6 = new TableColumn(tableSpe, SWT.NONE);
 		tableColumn_6.setWidth(150);
@@ -157,6 +194,12 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		tableConn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tableConn.setHeaderVisible(true);
 		tableConn.setLinesVisible(true);
+		tableConn.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+				selectNewComp(tableConn, CompType.CONNAISSANCE);
+			}
+		});
 		
 		TableColumn tableColumn_9 = new TableColumn(tableConn, SWT.NONE);
 		tableColumn_9.setWidth(150);
@@ -174,6 +217,12 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		tableDraco.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tableDraco.setHeaderVisible(true);
 		tableDraco.setLinesVisible(true);
+		tableDraco.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+				selectNewComp(tableDraco, CompType.DRACONIC);
+			}
+		});
 		
 		TableColumn tableColumn_12 = new TableColumn(tableDraco, SWT.NONE);
 		tableColumn_12.setWidth(150);
@@ -220,11 +269,17 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 	 */
 	@Override
 	public void updatePerso() {
-		// TODO Auto-generated method stub
 		lblPerso.setText(edited.getCaracTextCompressed());
 	}
 	
 	public Composite getComposite() {
 		return this;
+	}
+
+	
+	
+	private void selectNewComp(Table tableComb, CompType type) {
+		// TODO Auto-generated method stub
+		
 	}
 }

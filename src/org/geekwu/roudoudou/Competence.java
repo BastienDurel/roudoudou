@@ -56,6 +56,32 @@ public class Competence extends Entrainable {
 		}
 	}
 
+	public static class List {
+		public static String generale[] = { "Bricolage", "Chant", "Course", "Cuisine", "Danse",
+				"Dessin", "Discretion", "Escalade", "Saut", "Séduction", "vigilance" };
+
+		public static String corps_a_corps[] = { "Corps-à-corps", "Dague", "Épée à une main",
+				"Épée à deux mains", "Hache à une main", "Hache à deux mains", "Masse à une main",
+				"Masse à deux mains", "Fléau", "Arme d'hast", "Lance", "Bouclier" };
+
+		public static String tir[] = { "Arbalète", "Arc", "Fronde", "Dague de jet", "Lance (lancer)", "Fouet" };
+
+		public static String particuliere[] = { "Charpenterie", "Comédie", "Commerce", "Équitation",
+				"Maçonnerie", "Musique", "Pickpocket", "Survie en cité", "Survie en extérieur",
+				"Travestissement" };
+
+		public static String survies[] = { "Survie en Désert", "Survie en Forêt", "Survie en Glaces",
+				"Survie en Marais", "Survie en Montagne", "Survie en Sous-sol" };
+
+		public static String specialisee[] = { "Acrobaties", "chirurgie", "Jeu", "Jonglerie",
+				"Maroquinerie", "Métalurgie", "Natation", "Navigation", "Orfévrerie", "Serrurerie" };
+
+		public static String connaissance[] = { "Alchimie", "Astrologie", "Botanique", "Écriture",
+				"Légendes", "Médecine", "Zoologie" };
+
+		public static String draconic[] = { "Oniros", "Hypnos", "Narcos", "thanatos" };
+	}
+
 	public static class Factory {
 		public static Competence generale(String name) {
 			return new Competence(-4, name);
