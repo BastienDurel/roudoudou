@@ -1,4 +1,5 @@
 package org.geekwu.roudoudou.ui;
+
 import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -11,40 +12,48 @@ import org.eclipse.swt.layout.FormAttachment;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.geekwu.roudoudou.Competence;
+import org.geekwu.roudoudou.Sort;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 /*
-  	Copyright © 2012 Bastien Durel
+ Copyright © 2012 Bastien Durel
 
-    This file is part of roudoudou.
+ This file is part of roudoudou.
 
-    myDobble is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+ myDobble is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation, either version 3 of the License, or
+ (at your option) any later version.
 
-    myDobble is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+ myDobble is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License
-    along with myDobble.  If not, see <http://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU General Public License
+ along with myDobble.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 /**
  * @author Bastien Durel
- *
+ * 
  */
 public class CompSelector extends Dialog {
 
 	protected Object result = null;
 
 	protected Shell shlChoisissezLaComptence;
+
 	private List compList;
+
 	private Competence list[] = null;
+
+	private Sort list2[] = null;
 
 	/**
 	 * Create the dialog.
+	 * 
 	 * @param parent
 	 * @param style
 	 */
@@ -52,7 +61,7 @@ public class CompSelector extends Dialog {
 		super(parent, style);
 		setText("SWT Dialog");
 	}
-	
+
 	public CompSelector(Shell parent, int style, Competence list[]) {
 		super(parent, style);
 		setText("SWT Dialog");
@@ -61,6 +70,7 @@ public class CompSelector extends Dialog {
 
 	/**
 	 * Open the dialog.
+	 * 
 	 * @return the result
 	 */
 	public Object open() {
@@ -75,9 +85,15 @@ public class CompSelector extends Dialog {
 		}
 		return result;
 	}
-	
-	public void setList(Competence list[]) {
+
+	public CompSelector setList(Competence list[]) {
 		this.list = list;
+		return this;
+	}
+
+	public CompSelector setSorts(Sort list[]) {
+		this.list2 = list;
+		return this;
 	}
 
 	/**
@@ -88,12 +104,22 @@ public class CompSelector extends Dialog {
 		shlChoisissezLaComptence.setSize(450, 300);
 		shlChoisissezLaComptence.setText("Choisissez la compétence");
 		shlChoisissezLaComptence.setLayout(new FormLayout());
-		
+
 		compList = new List(shlChoisissezLaComptence, SWT.BORDER);
+		compList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDoubleClick(MouseEvent arg0) {
+				shlChoisissezLaComptence.dispose();
+			}
+		});
 		compList.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
-				result = list[compList.getSelectionIndex()];
+				int idx = compList.getSelectionIndex();
+				if (idx < list.length)
+					result = list[idx];
+				else
+					result = list2[idx - list.length];
 			}
 		});
 		FormData fd_compList = new FormData();
@@ -101,7 +127,7 @@ public class CompSelector extends Dialog {
 		fd_compList.left = new FormAttachment(0, 10);
 		fd_compList.right = new FormAttachment(0, 438);
 		compList.setLayoutData(fd_compList);
-		
+
 		Button btnOk = new Button(shlChoisissezLaComptence, SWT.NONE);
 		btnOk.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -116,11 +142,12 @@ public class CompSelector extends Dialog {
 		fd_btnOk.left = new FormAttachment(0, 329);
 		btnOk.setLayoutData(fd_btnOk);
 		btnOk.setText("Ok");
-		
+
 		Button btnAnnuler = new Button(shlChoisissezLaComptence, SWT.NONE);
 		btnAnnuler.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
+				result = null;
 				shlChoisissezLaComptence.dispose();
 			}
 		});
@@ -133,10 +160,15 @@ public class CompSelector extends Dialog {
 
 		populateList();
 	}
-	
+
 	private void populateList() {
 		for (int i = 0; i < list.length; ++i) {
 			compList.add(list[i].name);
 		}
+		if (list2 != null)
+			for (int i = 0; i < list2.length; ++i) {
+				compList.add(list2[i].getNom() + "(R-" + list2[i].getDifficulte() + ", r"
+						+ list2[i].getCout() + ")");
+			}
 	}
 }

@@ -19,20 +19,45 @@
 package org.geekwu.roudoudou;
 
 import java.util.List;
+import java.util.Vector;
 
 /**
  * @author Bastien Durel
- *
+ * 
  */
 public class Sort {
-	public static final int VARIABLE = Integer.MAX_VALUE; 
-	
+	public static final int VARIABLE = Integer.MAX_VALUE;
+
 	String nom;
+
+	public String getNom() {
+		return nom;
+	}
+
+	public List<Competence> getVoie() {
+		return voie;
+	}
+
+	public String getTMR() {
+		return TMR;
+	}
+
+	public int getDifficulte() {
+		return difficulte;
+	}
+
+	public int getCout() {
+		return cout;
+	}
+
 	List<Competence> voie;
+
 	String TMR;
+
 	int difficulte;
+
 	int cout;
-	
+
 	/**
 	 * @return XP to buy
 	 */
@@ -40,5 +65,21 @@ public class Sort {
 		if (difficulte == VARIABLE)
 			return 70;
 		return difficulte * 10;
+	}
+
+	private static List<Sort> _list = null;
+
+	static public List<Sort> loadList() {
+		if (_list == null) {
+			_list = new Vector<Sort>();
+			// TODO: get spell list
+			Sort test = new Sort();
+			test.cout = 7;
+			test.difficulte = 2;
+			test.nom = "Test";
+			test.TMR = "Partout";
+			_list.add(test);
+		}
+		return _list;
 	}
 }

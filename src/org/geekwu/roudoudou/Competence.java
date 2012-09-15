@@ -108,7 +108,7 @@ public class Competence extends Entrainable {
 		}
 
 		public static Competence particuliere(String name) {
-			return new Competence(-5, name);
+			return new Competence(-8, name);
 		}
 
 		public static Competence specialisee(String name) {
@@ -150,6 +150,16 @@ public class Competence extends Entrainable {
 		for (int i = startingLevel; i < value; ++i)
 			result += getNextStep(i);
 		return result + xp;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Competence)
+			return name.equals(((Competence) obj).name);
+		return super.equals(obj);
 	}
 
 }

@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.SWT;
@@ -301,7 +302,7 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 	@Override
 	public void updatePerso() {
 		lblPerso.setText(edited.getCaracTextCompressed());
-		lblStatus.setText("XP dépensée : " + this.totalXP());
+		lblStatus.setText("XP dépensée : " + this.totalXP() + "/2000");
 		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_END);
 		gridData.horizontalAlignment = SWT.FILL;
 		gridData.horizontalSpan = 3;
@@ -315,6 +316,7 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 
 	private void selectNewComp(Table table, CompType type) {
 		List<Competence> l = new Vector<Competence>();
+		List<Sort> s = null;
 		switch (type) {
 		case COMBAT:
 			for (int i = 0; i < Competence.List.corps_a_corps.length; ++i)
@@ -325,22 +327,22 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 
 		case GENERALE:
 			for (int i = 0; i < Competence.List.generale.length; ++i)
-				l.add(Competence.Factory.combat(Competence.List.generale[i]));
+				l.add(Competence.Factory.generale(Competence.List.generale[i]));
 			break;
 
 		case PARTICULIERE:
 			for (int i = 0; i < Competence.List.particuliere.length; ++i)
-				l.add(Competence.Factory.combat(Competence.List.particuliere[i]));
+				l.add(Competence.Factory.particuliere(Competence.List.particuliere[i]));
 			break;
 
 		case SPECIALISEE:
 			for (int i = 0; i < Competence.List.specialisee.length; ++i)
-				l.add(Competence.Factory.combat(Competence.List.specialisee[i]));
+				l.add(Competence.Factory.specialisee(Competence.List.specialisee[i]));
 			break;
 
 		case CONNAISSANCE:
 			for (int i = 0; i < Competence.List.connaissance.length; ++i)
-				l.add(Competence.Factory.combat(Competence.List.connaissance[i]));
+				l.add(Competence.Factory.connaissance(Competence.List.connaissance[i]));
 			break;
 
 		case DRACONIC:
@@ -348,38 +350,77 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 				boolean dest = Competence.List.draconic[i].equals(Competence.List.special.THANATOS);
 				l.add(Competence.Factory.draconic(Competence.List.draconic[i], dest));
 			}
+			s = Sort.loadList();
 			break;
 
 		default:
 			return;
 		}
+		// Don't dup
+		Iterator<Competence> i = getEdited().competences.iterator();
+		while (i.hasNext()) {
+			Competence tmp = i.next();
+			if (l.contains(tmp)) {
+				l.remove(tmp);
+			}
+		}
+		
 		Competence[] c = new Competence[l.size()];
-		Object response = new CompSelector(getShell(), getStyle(), l.toArray(c)).open();
-		if (response == null || !(response instanceof Competence))
+		Object response;
+		if (s == null)
+			response = new CompSelector(getShell(), getStyle(), l.toArray(c)).open();
+		else {
+			Sort[] sa = new Sort[s.size()];
+			response = new CompSelector(getShell(), getStyle(), l.toArray(c)).setSorts(s.toArray(sa)).open();
+		}
+		if (response == null)
 			return;
-		Competence comp = (Competence) response;
-		TableItem item = new TableItem(table, SWT.NONE);
-		item.setData(comp);
-		item.setText(comp.name);
-		Spinner spin = new Spinner(table, getStyle());
-		spin.setMaximum(3);
-		spin.setMinimum(comp.value);
-		spin.setSelection(comp.value);
-		TableEditor editor = new TableEditor(table);
-		editor.grabHorizontal = editor.grabVertical = true;
-		editor.setEditor(spin, item, 1);
-		spin.addSelectionListener(new SpinChanger(spin, item));
-		getEdited().competences.add(comp);
+		if (response instanceof Competence) {
+			Competence comp = (Competence) response;
+			TableItem item = new TableItem(table, SWT.NONE);
+			item.setData(comp);
+			item.setText(comp.name);
+			Spinner spin = new Spinner(table, getStyle());
+			spin.setMaximum(3);
+			spin.setMinimum(comp.value);
+			spin.setSelection(comp.value);
+			TableEditor editor = new TableEditor(table);
+			editor.grabHorizontal = editor.grabVertical = true;
+			editor.setEditor(spin, item, 1);
+			spin.addSelectionListener(new SpinChanger(spin, item));
+			getEdited().competences.add(comp);
+		}
+		else if (response instanceof Sort) {
+			Sort sort = (Sort)response;
+			if (XPSorts() + sort.getXP() > 300) {
+				new MessageBox(getShell(), SWT.ICON_ERROR).open();
+				return;
+			}
+			TableItem item = new TableItem(table, SWT.NONE);
+			item.setData(sort);
+			item.setText(new String[] {sort.getNom(), "", Integer.toString(sort.getXP())});
+			getEdited().sorts.add(sort);
+			updatePerso();
+		}
 	}
 
 	protected int totalXP() {
+		return XPCompetences() + XPSorts();
+	}
+	
+	protected int XPCompetences() {
 		int xp = 0;
 		Iterator<Competence> i = getEdited().competences.iterator();
 		while (i.hasNext())
 			xp += i.next().getTotalXp();
-		Iterator<Sort> j = getEdited().sorts.iterator();
-		while (j.hasNext())
-			xp += j.next().getXP();
+		return xp;
+	}
+
+	protected int XPSorts() {
+		int xp = 0;
+		Iterator<Sort> i = getEdited().sorts.iterator();
+		while (i.hasNext())
+			xp += i.next().getXP();
 		return xp;
 	}
 
