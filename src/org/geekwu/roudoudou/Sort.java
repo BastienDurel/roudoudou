@@ -18,30 +18,27 @@
  */
 package org.geekwu.roudoudou;
 
+import java.util.List;
+
 /**
  * @author Bastien Durel
  *
  */
-public class CompetenceDraconic extends Competence {
-	private static final long serialVersionUID = -6301110191864466130L;
-	/**
-	 * Destroys XP when level is gained
-	 */
-	boolean destroyer = false;
-	public boolean isDestroyer() {
-		return destroyer;
-	}
+public class Sort {
+	public static final int VARIABLE = Integer.MAX_VALUE; 
 	
-	CompetenceDraconic(int value, String name, boolean destroyer) {
-		super(value, name);
-		this.destroyer = destroyer;
+	String nom;
+	List<Competence> voie;
+	String TMR;
+	int difficulte;
+	int cout;
+	
+	/**
+	 * @return XP to buy
+	 */
+	public int getXP() {
+		if (difficulte == VARIABLE)
+			return 70;
+		return difficulte * 10;
 	}
-
-	@Override
-	public int getTotalXp() {
-		if (destroyer)
-			return super.getTotalXp() * 2;
-		return super.getTotalXp();
-	}
-
 }

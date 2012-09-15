@@ -3,7 +3,6 @@ import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.layout.FormLayout;
-import swing2swt.layout.BorderLayout;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;

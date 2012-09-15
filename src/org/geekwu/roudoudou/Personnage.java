@@ -53,6 +53,7 @@ public class Personnage implements Serializable {
 	}
 
 	List<Competence> competences = new Vector<Competence>();
+	List<Sort> sorts = new Vector<Sort>();
 
 	@Override
 	public String toString() {

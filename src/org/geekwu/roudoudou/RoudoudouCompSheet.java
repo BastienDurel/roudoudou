@@ -18,6 +18,7 @@
  */
 package org.geekwu.roudoudou;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
@@ -32,14 +33,12 @@ import org.eclipse.swt.layout.GridData;
 import swing2swt.layout.BorderLayout;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.geekwu.roudoudou.ui.CompSelector;
+import org.eclipse.swt.widgets.Button;
 
 /**
  * @author Bastien Durel
@@ -72,6 +71,8 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 	private Table tableDraco;
 
 	private Label lblStatus;
+
+	private Button btnSauver;
 
 	/**
 	 * Create the composite.
@@ -255,9 +256,13 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		tableColumn_14.setText("XP");
 
 		lblStatus = new Label(composite, SWT.NONE);
-		lblStatus.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		lblStatus.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		lblStatus.setText("Status");
-		new Label(composite, SWT.NONE);
+
+		btnSauver = new Button(composite, SWT.NONE);
+		btnSauver.setEnabled(false);
+		btnSauver.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		btnSauver.setText("Sauver");
 
 	}
 
@@ -296,6 +301,12 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 	@Override
 	public void updatePerso() {
 		lblPerso.setText(edited.getCaracTextCompressed());
+		lblStatus.setText("XP dépensée : " + this.totalXP());
+		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_END);
+		gridData.horizontalAlignment = SWT.FILL;
+		gridData.horizontalSpan = 3;
+		lblStatus.setLayoutData(gridData);
+		btnSauver.setEnabled(totalXP() == 2000);
 	}
 
 	public Composite getComposite() {
@@ -303,7 +314,6 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 	}
 
 	private void selectNewComp(Table table, CompType type) {
-		// TODO Auto-generated method stub
 		List<Competence> l = new Vector<Competence>();
 		switch (type) {
 		case COMBAT:
@@ -313,8 +323,35 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 				l.add(Competence.Factory.tir(Competence.List.tir[i]));
 			break;
 
-		default:
+		case GENERALE:
+			for (int i = 0; i < Competence.List.generale.length; ++i)
+				l.add(Competence.Factory.combat(Competence.List.generale[i]));
 			break;
+
+		case PARTICULIERE:
+			for (int i = 0; i < Competence.List.particuliere.length; ++i)
+				l.add(Competence.Factory.combat(Competence.List.particuliere[i]));
+			break;
+
+		case SPECIALISEE:
+			for (int i = 0; i < Competence.List.specialisee.length; ++i)
+				l.add(Competence.Factory.combat(Competence.List.specialisee[i]));
+			break;
+
+		case CONNAISSANCE:
+			for (int i = 0; i < Competence.List.connaissance.length; ++i)
+				l.add(Competence.Factory.combat(Competence.List.connaissance[i]));
+			break;
+
+		case DRACONIC:
+			for (int i = 0; i < Competence.List.draconic.length; ++i) {
+				boolean dest = Competence.List.draconic[i].equals(Competence.List.special.THANATOS);
+				l.add(Competence.Factory.draconic(Competence.List.draconic[i], dest));
+			}
+			break;
+
+		default:
+			return;
 		}
 		Competence[] c = new Competence[l.size()];
 		Object response = new CompSelector(getShell(), getStyle(), l.toArray(c)).open();
@@ -332,26 +369,37 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		editor.grabHorizontal = editor.grabVertical = true;
 		editor.setEditor(spin, item, 1);
 		spin.addSelectionListener(new SpinChanger(spin, item));
+		getEdited().competences.add(comp);
 	}
-	
+
+	protected int totalXP() {
+		int xp = 0;
+		Iterator<Competence> i = getEdited().competences.iterator();
+		while (i.hasNext())
+			xp += i.next().getTotalXp();
+		Iterator<Sort> j = getEdited().sorts.iterator();
+		while (j.hasNext())
+			xp += j.next().getXP();
+		return xp;
+	}
+
 	private class SpinChanger extends SelectionAdapter {
 		TableItem item;
+
 		Spinner spin;
-		int aggregatedXp = 0;
-		
+
 		SpinChanger(Spinner spin, TableItem item) {
 			super();
 			this.spin = spin;
 			this.item = item;
 		}
-		
+
 		@Override
 		public void widgetSelected(SelectionEvent arg0) {
 			Competence comp = (Competence) item.getData();
-			int xp = comp.getNextStep();
-			comp.addXP(xp);
-			aggregatedXp += xp;
-			item.setText(2, Integer.toString(aggregatedXp));
+			comp.value = spin.getSelection();
+			item.setText(2, Integer.toString(comp.getTotalXp()));
+			updatePerso();
 		}
 	}
 }
