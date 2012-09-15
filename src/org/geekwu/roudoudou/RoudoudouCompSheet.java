@@ -23,6 +23,7 @@ import java.util.Vector;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
@@ -30,8 +31,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.GridData;
 import swing2swt.layout.BorderLayout;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.geekwu.roudoudou.ui.CompSelector;
 
 /**
@@ -317,5 +324,34 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		TableItem item = new TableItem(table, SWT.NONE);
 		item.setData(comp);
 		item.setText(comp.name);
+		Spinner spin = new Spinner(table, getStyle());
+		spin.setMaximum(3);
+		spin.setMinimum(comp.value);
+		spin.setSelection(comp.value);
+		TableEditor editor = new TableEditor(table);
+		editor.grabHorizontal = editor.grabVertical = true;
+		editor.setEditor(spin, item, 1);
+		spin.addSelectionListener(new SpinChanger(spin, item));
+	}
+	
+	private class SpinChanger extends SelectionAdapter {
+		TableItem item;
+		Spinner spin;
+		int aggregatedXp = 0;
+		
+		SpinChanger(Spinner spin, TableItem item) {
+			super();
+			this.spin = spin;
+			this.item = item;
+		}
+		
+		@Override
+		public void widgetSelected(SelectionEvent arg0) {
+			Competence comp = (Competence) item.getData();
+			int xp = comp.getNextStep();
+			comp.addXP(xp);
+			aggregatedXp += xp;
+			item.setText(2, Integer.toString(aggregatedXp));
+		}
 	}
 }
