@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Label;
 import org.geekwu.roudoudou.ui.CaracFinishedEvent;
+import org.geekwu.roudoudou.ui.PersoEvent;
 import org.geekwu.roudoudou.ui.RoudoudouEvent;
 import org.geekwu.roudoudou.ui.RoudoudouListener;
 
@@ -64,6 +65,8 @@ public class MainUI {
 
 	protected static Map<Class<?>, RoudoudouListener> roudoudouListners = new HashMap<Class<?>, RoudoudouListener>();
 
+	private ScrolledComposite scrolledComposite;
+
 	protected static class RoudoudouRunnable implements Runnable {
 		RoudoudouEvent event;
 
@@ -82,7 +85,7 @@ public class MainUI {
 	public static void fireRoudoudouEvent(RoudoudouEvent event) {
 		Display.getDefault().asyncExec(new RoudoudouRunnable(event));
 	}
-	
+
 	public static void addRoudoudouListener(Class<?> c, RoudoudouListener listener) {
 		roudoudouListners.put(c, listener);
 	}
@@ -162,70 +165,25 @@ public class MainUI {
 		tltmSave.setEnabled(false);
 		tltmSave.setText("Save");
 
-		ScrolledComposite scrolledComposite = new ScrolledComposite(shlRoudoudou, SWT.BORDER
-				| SWT.H_SCROLL | SWT.V_SCROLL);
+		scrolledComposite = new ScrolledComposite(shlRoudoudou, SWT.BORDER | SWT.H_SCROLL
+				| SWT.V_SCROLL);
 		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
-
-		compositeSheet = new RoudoudouSheet(scrolledComposite, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		new Label(compositeSheet, SWT.NONE);
-		scrolledComposite.setContent(compositeSheet);
-		scrolledComposite.setMinSize(compositeSheet.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 
 		addRoudoudouListener(CaracFinishedEvent.class, new RoudoudouListener() {
 
 			@Override
 			public void handle(RoudoudouEvent event) {
 				System.out.println("there ...");
-				compositeSheet.dispose();
+				if (compositeSheet != null && event instanceof PersoEvent) {
+					compositeSheet.getComposite().dispose();
+					if (compositeSheet instanceof RoudoudouCaracSheet) {
+						caracToComp();
+					} else {
+						compositeSheet = null;
+					}
+				}
 			}
 		});
 
@@ -236,7 +194,9 @@ public class MainUI {
 	}
 
 	protected boolean checkSave(boolean cancel) {
-		if (compositeSheet.edited != null) {
+		if (compositeSheet == null)
+			return true;
+		if (compositeSheet.getEdited() != null) {
 
 		}
 		return true;
@@ -250,8 +210,69 @@ public class MainUI {
 
 	protected void onNew() {
 		if (checkSave()) {
-			compositeSheet.edited = new Personnage("unnamed");
+
+			compositeSheet = new RoudoudouCaracSheet(scrolledComposite, SWT.NONE);/*
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);
+			new Label(compositeSheet, SWT.NONE);*/
+			scrolledComposite.setContent(compositeSheet.getComposite());
+			scrolledComposite.setMinSize(compositeSheet.getComposite().computeSize(SWT.DEFAULT, SWT.DEFAULT));
+
+			compositeSheet.setEdited(new Personnage("unnamed"));
 			compositeSheet.updatePerso();
 		}
+	}
+	protected void caracToComp() {
+		Personnage perso = compositeSheet.getEdited();
+		compositeSheet = new RoudoudouCaracSheet(scrolledComposite, SWT.NONE);
+		compositeSheet.setEdited(perso);
+		scrolledComposite.setContent(compositeSheet.getComposite());
+		scrolledComposite.setMinSize(compositeSheet.getComposite().computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		compositeSheet.updatePerso();
 	}
 }
