@@ -20,19 +20,19 @@ public class Personnage implements Serializable {
 
 	boolean vrai_revant = true;
 
-	Caracteristique taille = new Caracteristique(8);
+	Caracteristique taille = new Caracteristique(15);
 
-	Caracteristique apparence = new Caracteristique(8);
+	Caracteristique apparence = new Caracteristique(15);
 
-	Caracteristique constitution = new Caracteristique(8);
+	Caracteristique constitution = new Caracteristique(15);
 
-	Caracteristique force = new Caracteristique(8);
+	Caracteristique force = new Caracteristique(15);
 
-	Caracteristique agilite = new Caracteristique(8);
+	Caracteristique agilite = new Caracteristique(15);
 
-	Caracteristique dexterite = new Caracteristique(8);
+	Caracteristique dexterite = new Caracteristique(15);
 
-	Caracteristique vue = new Caracteristique(8);
+	Caracteristique vue = new Caracteristique(14);
 
 	Caracteristique ouie = new Caracteristique(8);
 
@@ -186,5 +186,26 @@ public class Personnage implements Serializable {
 	 */
 	public float getEncombrement() {
 		return (taille.value + force.value) / 2;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getCaracTextCompressed() {
+		return "Nom: " + name + " Beauté: " + beaute + System.lineSeparator() + "Taille: "
+				+ taille.value + " Apparence: " + apparence.value + " Constitution: "
+				+ constitution.value + " Force: " + force.value + " Agilité: " + agilite.value
+				+ " Dextérité: " + dexterite.value + " Vue: " + vue.value + " Ouïe: " + ouie.value
+				+ " Odorat-Goût: " + odorat_gout.value + " Volonté: " + volonte.value + " Empathie: "
+				+ empathie.value + " Intellect: " + intellect.value + " Rêve: " + reve.value
+				+ " Chance: " + chance.value;
+	}
+
+	public boolean isVraiRevant() {
+		return vrai_revant;
+	}
+
+	public void setVraiRevant(boolean vrai_revant) {
+		this.vrai_revant = vrai_revant;
 	}
 }

@@ -12,6 +12,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.geekwu.roudoudou.ui.CaracFinishedEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.ModifyEvent;
 
 /*
  Copyright © 2012 Bastien Durel
@@ -91,6 +93,7 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 	/**
 	 * Create the composite.
 	 * 
+	 * 
 	 * @param parent
 	 * @param style
 	 */
@@ -102,9 +105,8 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		lblNom.setText("Nom");
 
 		textName = new Text(this, SWT.BORDER);
-		textName.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
+		textName.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent arg0) {
 				if (edited == null)
 					return;
 				edited.name = textName.getText();

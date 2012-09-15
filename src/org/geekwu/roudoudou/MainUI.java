@@ -109,7 +109,7 @@ public class MainUI {
 	 */
 	protected void createContents() {
 		shlRoudoudou = new Shell();
-		shlRoudoudou.setSize(553, 422);
+		shlRoudoudou.setSize(620, 640);
 		shlRoudoudou.setText("Roudoudou");
 		shlRoudoudou.setLayout(new GridLayout(1, false));
 
@@ -166,7 +166,9 @@ public class MainUI {
 
 		scrolledComposite = new ScrolledComposite(shlRoudoudou, SWT.BORDER | SWT.H_SCROLL
 				| SWT.V_SCROLL);
-		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		GridData gd_scrolledComposite = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+		gd_scrolledComposite.heightHint = 551;
+		scrolledComposite.setLayoutData(gd_scrolledComposite);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
 
