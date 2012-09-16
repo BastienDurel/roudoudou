@@ -49,6 +49,8 @@ public abstract class Entrainable implements Serializable {
 	 */
 	public abstract int getNextStep();
 	
-	
+	public boolean acceptXp() {
+		return true;
+	}
 
 }

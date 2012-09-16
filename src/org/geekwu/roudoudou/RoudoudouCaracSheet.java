@@ -503,6 +503,7 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 	 */
 	protected void onValid() {
 		if (edited.getCaracsPoints() == 160) {
+			edited.taille.lock();
 			MainUI.fireRoudoudouEvent(new CaracFinishedEvent(edited));
 		}
 	}

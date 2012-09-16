@@ -33,5 +33,10 @@ public class Caracteristique extends Entrainable {
 	void lock() {
 		this.finale = true;
 	}
+	
+	@Override
+	public boolean acceptXp() {
+		return !this.finale;
+	}
 
 }

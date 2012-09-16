@@ -18,11 +18,16 @@
  */
 package org.geekwu.roudoudou;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.ToolBar;
@@ -35,6 +40,8 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.geekwu.roudoudou.ui.CaracFinishedEvent;
 import org.geekwu.roudoudou.ui.CompFinishedEvent;
+import org.geekwu.roudoudou.ui.PersoChanged;
+import org.geekwu.roudoudou.ui.PersoEdited;
 import org.geekwu.roudoudou.ui.RoudoudouEvent;
 import org.geekwu.roudoudou.ui.RoudoudouListener;
 
@@ -47,6 +54,22 @@ public class MainUI {
 	protected Shell shlRoudoudou;
 
 	protected RoudoudouSheet compositeSheet;
+
+	private ToolItem tltmNew;
+
+	private ToolItem tltmOpen;
+
+	private MenuItem mntmSave;
+
+	private MenuItem mntmNew;
+
+	protected File lastSave = null;
+
+	protected enum State {
+		NONE, NEW, VIEW, EDIT
+	};
+
+	protected State state = State.NONE;
 
 	/**
 	 * Launch the application.
@@ -65,6 +88,10 @@ public class MainUI {
 	protected static Map<Class<?>, RoudoudouListener> roudoudouListners = new HashMap<Class<?>, RoudoudouListener>();
 
 	private ScrolledComposite scrolledComposite;
+
+	private ToolItem tltmSave;
+
+	private MenuItem mntmOpen;
 
 	protected static class RoudoudouRunnable implements Runnable {
 		RoudoudouEvent event;
@@ -122,14 +149,32 @@ public class MainUI {
 		Menu menu_1 = new Menu(mntmFile_1);
 		mntmFile_1.setMenu(menu_1);
 
-		MenuItem mntmNew = new MenuItem(menu_1, SWT.NONE);
+		mntmNew = new MenuItem(menu_1, SWT.NONE);
+		mntmNew.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				onNew();
+			}
+		});
 		mntmNew.setText("New");
 
-		MenuItem mntmOpen = new MenuItem(menu_1, SWT.NONE);
+		mntmOpen = new MenuItem(menu_1, SWT.NONE);
+		mntmOpen.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				onOpen();
+			}
+		});
 		mntmOpen.setText("Open");
 
-		MenuItem mntmSave = new MenuItem(menu_1, SWT.NONE);
+		mntmSave = new MenuItem(menu_1, SWT.NONE);
 		mntmSave.setEnabled(false);
+		mntmSave.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				onSave();
+			}
+		});
 		mntmSave.setText("Save");
 
 		new MenuItem(menu_1, SWT.SEPARATOR);
@@ -148,7 +193,7 @@ public class MainUI {
 
 		ToolBar toolBar = new ToolBar(shlRoudoudou, SWT.FLAT | SWT.WRAP | SWT.RIGHT);
 
-		ToolItem tltmNew = new ToolItem(toolBar, SWT.NONE);
+		tltmNew = new ToolItem(toolBar, SWT.NONE);
 		tltmNew.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -157,10 +202,24 @@ public class MainUI {
 		});
 		tltmNew.setText("New");
 
-		ToolItem tltmOpen = new ToolItem(toolBar, SWT.NONE);
+		tltmOpen = new ToolItem(toolBar, SWT.NONE);
+		tltmOpen.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				onOpen();
+			}
+		});
 		tltmOpen.setText("Open");
 
-		ToolItem tltmSave = new ToolItem(toolBar, SWT.NONE);
+		tltmSave = new ToolItem(toolBar, SWT.NONE);
+		tltmSave.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				if (onSave())
+					state = State.VIEW;
+				updateState();
+			}
+		});
 		tltmSave.setEnabled(false);
 		tltmSave.setText("Save");
 
@@ -191,10 +250,39 @@ public class MainUI {
 					Personnage perso = compositeSheet.getEdited();
 					compositeSheet = null;
 					openLiveSheet(perso);
+					fireRoudoudouEvent(new PersoEdited());
 				}
 			}
 		});
+		addRoudoudouListener(PersoChanged.class, new RoudoudouListener() {
 
+			@Override
+			public void handle(RoudoudouEvent event) {
+				if (compositeSheet != null) {
+					compositeSheet.updatePerso();
+					state = State.EDIT;
+					updateState();
+				}
+			}
+		});
+		addRoudoudouListener(PersoEdited.class, new RoudoudouListener() {
+
+			@Override
+			public void handle(RoudoudouEvent event) {
+				state = State.EDIT;
+				updateState();
+			}
+		});
+
+	}
+
+	protected void updateState() {
+		tltmSave.setEnabled(state == State.EDIT);
+		mntmSave.setEnabled(state == State.EDIT);
+		tltmNew.setEnabled(state != State.NEW);
+		mntmNew.setEnabled(state != State.NEW);
+		tltmOpen.setEnabled(state != State.NEW);
+		mntmOpen.setEnabled(state != State.NEW);
 	}
 
 	protected boolean checkSave() {
@@ -205,7 +293,24 @@ public class MainUI {
 		if (compositeSheet == null)
 			return true;
 		if (compositeSheet.getEdited() != null) {
-
+			switch (state) {
+			case NONE:
+			case VIEW:
+				return true;
+			case EDIT: {
+				MessageBox messageBox = new MessageBox(shlRoudoudou, SWT.ICON_WARNING | SWT.YES | SWT.NO
+						| SWT.CANCEL);
+				messageBox.setMessage("Voulez-vous sauver l'édition en cours ?");
+				int rc = messageBox.open();
+				if (rc == SWT.CANCEL)
+					return false;
+				if (rc == SWT.YES)
+					return onSave();
+				return true;
+			}
+			case NEW:
+				return false;
+			}
 		}
 		return true;
 	}
@@ -218,7 +323,7 @@ public class MainUI {
 
 	protected void onNew() {
 		if (checkSave()) {
-
+			onClose();
 			compositeSheet = new RoudoudouCaracSheet(scrolledComposite, SWT.NONE);
 			scrolledComposite.setContent(compositeSheet.getComposite());
 			scrolledComposite.setMinSize(compositeSheet.getComposite().computeSize(SWT.DEFAULT,
@@ -227,6 +332,73 @@ public class MainUI {
 			compositeSheet.setEdited(new Personnage("unnamed"));
 			compositeSheet.updatePerso();
 		}
+	}
+
+	protected void onClose() {
+		if (checkSave()) {
+			state = State.NONE;
+			lastSave = null;
+			if (compositeSheet != null) {
+				compositeSheet.getComposite().dispose();
+				compositeSheet = null;
+			}
+			updateState();
+		}
+	}
+
+	protected void onOpen() {
+		if (checkSave()) {
+			FileDialog fd = new FileDialog(shlRoudoudou, SWT.OPEN);
+			String selected = fd.open();
+			if (selected != null) {
+				File f = new File(selected);
+				if (f.canRead()) {
+					onClose();
+					try {
+						Personnage perso = Personnage.fromFile(f);
+						lastSave = f;
+						openLiveSheet(perso);
+						System.out.println(perso);
+					} catch (Exception e) {
+						MessageBox messageBox = new MessageBox(shlRoudoudou, SWT.ICON_ERROR);
+						messageBox.setMessage("Impossible d'ouvrir ce personnage: " + e.getLocalizedMessage());
+						messageBox.open();
+					}
+				} else {
+					MessageBox messageBox = new MessageBox(shlRoudoudou, SWT.ICON_ERROR);
+					messageBox.setMessage("Impossible d'ouvrir ce fichier");
+					messageBox.open();
+				}
+			}
+		}
+	}
+
+	protected boolean onSave() {
+		try {
+			if (lastSave == null) {
+				FileDialog fd = new FileDialog(shlRoudoudou, SWT.SAVE);
+				String selected = fd.open();
+				if (selected != null) {
+					File f = new File(selected);
+					if (!f.exists()) {
+						FileOutputStream out = new FileOutputStream(f);
+						out.close();
+					}
+					if (f.canWrite())
+						lastSave = f;
+					else
+						throw new IOException("Impossible d'écrire dans ce fichier");
+				}
+			}
+			compositeSheet.getEdited().save(lastSave);
+		} catch (Exception e) {
+			e.printStackTrace();
+			MessageBox messageBox = new MessageBox(shlRoudoudou, SWT.ICON_ERROR);
+			messageBox.setMessage(e.getLocalizedMessage());
+			messageBox.open();
+			return false;
+		}
+		return true;
 	}
 
 	protected void caracToComp(Personnage perso) {
@@ -239,12 +411,12 @@ public class MainUI {
 	}
 
 	protected void openLiveSheet(Personnage perso) {
-		// TODO Auto-generated method stub
 		compositeSheet = new LiveSheet(scrolledComposite, SWT.NATIVE);
 		compositeSheet.setEdited(perso);
 		compositeSheet.updatePerso();
 		scrolledComposite.setContent(compositeSheet.getComposite());
 		scrolledComposite.setMinSize(compositeSheet.getComposite()
 				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		state = State.VIEW;
 	}
 }
