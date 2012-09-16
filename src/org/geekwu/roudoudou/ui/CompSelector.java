@@ -105,7 +105,7 @@ public class CompSelector extends Dialog {
 		shlChoisissezLaComptence.setText("Choisissez la compétence");
 		shlChoisissezLaComptence.setLayout(new FormLayout());
 
-		compList = new List(shlChoisissezLaComptence, SWT.BORDER);
+		compList = new List(shlChoisissezLaComptence, SWT.BORDER | SWT.V_SCROLL);
 		compList.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {

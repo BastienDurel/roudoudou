@@ -449,7 +449,8 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		spin.setSelection(comp.value);
 		spin.setMaximum(3);
 		if (comp instanceof CompetenceSurvie) {
-			spin.setMaximum(((CompetenceSurvie) comp).getMax());
+			int max = ((CompetenceSurvie) comp).getMax();
+			spin.setMaximum(Math.min(3, max));
 			// link spinner to survie
 			Iterator<SpinChanger> i = _spinChangers.iterator();
 			while (i.hasNext()) {
