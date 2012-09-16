@@ -178,7 +178,7 @@ public class MainUI {
 			public void handle(RoudoudouEvent event) {
 				if (compositeSheet != null) {
 					compositeSheet.getComposite().dispose();
-					caracToComp();
+					caracToComp(compositeSheet.getEdited());
 				}
 			}
 		});
@@ -188,8 +188,9 @@ public class MainUI {
 			public void handle(RoudoudouEvent event) {
 				if (compositeSheet != null) {
 					compositeSheet.getComposite().dispose();
+					Personnage perso = compositeSheet.getEdited();
 					compositeSheet = null;
-					// TODO: liveSheet
+					openLiveSheet(perso);
 				}
 			}
 		});
@@ -228,13 +229,22 @@ public class MainUI {
 		}
 	}
 
-	protected void caracToComp() {
-		Personnage perso = compositeSheet.getEdited();
+	protected void caracToComp(Personnage perso) {
 		compositeSheet = new RoudoudouCompSheet(scrolledComposite, SWT.NONE);
 		compositeSheet.setEdited(perso);
+		compositeSheet.updatePerso();
 		scrolledComposite.setContent(compositeSheet.getComposite());
 		scrolledComposite.setMinSize(compositeSheet.getComposite()
 				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+	}
+
+	protected void openLiveSheet(Personnage perso) {
+		// TODO Auto-generated method stub
+		compositeSheet = new LiveSheet(scrolledComposite, SWT.NATIVE);
+		compositeSheet.setEdited(perso);
 		compositeSheet.updatePerso();
+		scrolledComposite.setContent(compositeSheet.getComposite());
+		scrolledComposite.setMinSize(compositeSheet.getComposite()
+				.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 	}
 }

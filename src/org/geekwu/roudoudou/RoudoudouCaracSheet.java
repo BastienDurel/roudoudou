@@ -102,6 +102,7 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		setLayout(new GridLayout(5, false));
 
 		Label lblNom = new Label(this, SWT.NONE);
+		lblNom.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblNom.setText("Nom");
 
 		textName = new Text(this, SWT.BORDER);
@@ -113,6 +114,7 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 			}
 		});
 		GridData gridData = new GridData(GridData.VERTICAL_ALIGN_END);
+		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalAlignment = SWT.FILL;
 		gridData.verticalAlignment = SWT.FILL;
 		gridData.horizontalSpan = 4;
@@ -120,6 +122,7 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 
 		Label label = new Label(this, SWT.SEPARATOR | SWT.HORIZONTAL);
 		GridData gridData2 = new GridData(GridData.VERTICAL_ALIGN_END);
+		gridData2.grabExcessHorizontalSpace = true;
 		gridData2.horizontalAlignment = SWT.FILL;
 		gridData2.verticalAlignment = SWT.FILL;
 		gridData2.horizontalSpan = 5;
@@ -129,6 +132,7 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		lblCaractristiques.setFont(SWTResourceManager.getFont("Cantarell", 12, SWT.BOLD));
 		lblCaractristiques.setText("Caractéristiques");
 		GridData gridData3 = new GridData(GridData.VERTICAL_ALIGN_END);
+		gridData3.grabExcessHorizontalSpace = true;
 		gridData3.horizontalAlignment = SWT.FILL;
 		gridData3.verticalAlignment = SWT.FILL;
 		gridData3.horizontalSpan = 2;
@@ -136,7 +140,7 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 
 		labelPts = new Label(this, SWT.NONE);
 		labelPts.setAlignment(SWT.RIGHT);
-		GridData gridData4 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		GridData gridData4 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gridData4.horizontalAlignment = SWT.FILL;
 		gridData4.verticalAlignment = SWT.FILL;
 		gridData4.horizontalSpan = 3;
@@ -146,10 +150,12 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		new Label(this, SWT.NONE);
 
 		Label lblbeaut = new Label(this, SWT.NONE);
+		lblbeaut.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblbeaut.setText("(Beauté)");
 		new Label(this, SWT.NONE);
 
 		spinnerBea = new Spinner(this, SWT.BORDER);
+		spinnerBea.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerBea.setMaximum(16);
 		spinnerBea.setMinimum(3);
 		spinnerBea.setSelection(10);
@@ -164,9 +170,11 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		});
 
 		Label lblTaille = new Label(this, SWT.NONE);
+		lblTaille.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblTaille.setText("TAILLE");
 
 		spinnerTai = new Spinner(this, SWT.BORDER);
+		spinnerTai.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerTai.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -180,10 +188,12 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerTai.setMinimum(6);
 
 		Label lblVolont = new Label(this, SWT.NONE);
+		lblVolont.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblVolont.setText("VOLONTÉ");
 		new Label(this, SWT.NONE);
 
 		spinnerVol = new Spinner(this, SWT.BORDER);
+		spinnerVol.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerVol.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -197,9 +207,11 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerVol.setMinimum(6);
 
 		Label lblApparence = new Label(this, SWT.NONE);
+		lblApparence.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblApparence.setText("APPARENCE");
 
 		spinnerApp = new Spinner(this, SWT.BORDER);
+		spinnerApp.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerApp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -213,10 +225,12 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerApp.setMinimum(6);
 
 		Label lblIntellect = new Label(this, SWT.NONE);
+		lblIntellect.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblIntellect.setText("INTELLECT");
 		new Label(this, SWT.NONE);
 
 		spinnerInt = new Spinner(this, SWT.BORDER);
+		spinnerInt.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerInt.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -230,9 +244,11 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerInt.setMinimum(6);
 
 		Label lblConstitution = new Label(this, SWT.NONE);
+		lblConstitution.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblConstitution.setText("CONSTITUTION");
 
 		spinnerCon = new Spinner(this, SWT.BORDER);
+		spinnerCon.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerCon.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -246,10 +262,12 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerCon.setMinimum(6);
 
 		Label lblEmathie = new Label(this, SWT.NONE);
+		lblEmathie.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblEmathie.setText("EMATHIE");
 		new Label(this, SWT.NONE);
 
 		spinnerEmp = new Spinner(this, SWT.BORDER);
+		spinnerEmp.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerEmp.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -263,9 +281,11 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerEmp.setMinimum(6);
 
 		Label lblForce = new Label(this, SWT.NONE);
+		lblForce.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblForce.setText("FORCE");
 
 		spinnerFor = new Spinner(this, SWT.BORDER);
+		spinnerFor.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerFor.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -279,10 +299,12 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerFor.setMinimum(6);
 
 		Label lblRve = new Label(this, SWT.NONE);
+		lblRve.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblRve.setText("RÊVE");
 		new Label(this, SWT.NONE);
 
 		spinnerRev = new Spinner(this, SWT.BORDER);
+		spinnerRev.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerRev.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -296,9 +318,11 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerRev.setMinimum(6);
 
 		Label lblAgilit = new Label(this, SWT.NONE);
+		lblAgilit.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblAgilit.setText("AGILITÉ");
 
 		spinnerAgi = new Spinner(this, SWT.BORDER);
+		spinnerAgi.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerAgi.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -312,10 +336,12 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerAgi.setMinimum(6);
 
 		Label lblChance = new Label(this, SWT.NONE);
+		lblChance.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblChance.setText("CHANCE");
 		new Label(this, SWT.NONE);
 
 		spinnerCha = new Spinner(this, SWT.BORDER);
+		spinnerCha.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerCha.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -329,9 +355,11 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerCha.setMinimum(6);
 
 		Label lblDextrit = new Label(this, SWT.NONE);
+		lblDextrit.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblDextrit.setText("DEXTÉRITÉ");
 
 		spinnerDex = new Spinner(this, SWT.BORDER);
+		spinnerDex.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerDex.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -345,17 +373,20 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerDex.setMinimum(6);
 
 		Label lbl_10_3 = new Label(this, SWT.NONE);
+		lbl_10_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lbl_10_3.setText("Mêlée");
 		new Label(this, SWT.NONE);
 
 		labelMel = new Label(this, SWT.NONE);
-		labelMel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelMel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		labelMel.setText("0");
 
 		Label lblVue = new Label(this, SWT.NONE);
+		lblVue.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblVue.setText("VUE");
 
 		spinnerVue = new Spinner(this, SWT.BORDER);
+		spinnerVue.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerVue.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -369,17 +400,20 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerVue.setMinimum(6);
 
 		Label lbl_11_3 = new Label(this, SWT.NONE);
+		lbl_11_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lbl_11_3.setText("Tir");
 		new Label(this, SWT.NONE);
 
 		labelTir = new Label(this, SWT.NONE);
-		labelTir.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelTir.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		labelTir.setText("0");
 
 		Label lblOue = new Label(this, SWT.NONE);
+		lblOue.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblOue.setText("OUÏE");
 
 		spinnerOui = new Spinner(this, SWT.BORDER);
+		spinnerOui.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerOui.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -393,17 +427,20 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerOui.setMinimum(6);
 
 		Label lbl_12_3 = new Label(this, SWT.NONE);
+		lbl_12_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lbl_12_3.setText("Lancer");
 		new Label(this, SWT.NONE);
 
 		labelLan = new Label(this, SWT.NONE);
-		labelLan.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelLan.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		labelLan.setText("0");
 
 		Label lblOdoratgot = new Label(this, SWT.NONE);
+		lblOdoratgot.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lblOdoratgot.setText("ODORAT-GOÛT");
 
 		spinnerOdo = new Spinner(this, SWT.BORDER);
+		spinnerOdo.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		spinnerOdo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
@@ -417,23 +454,24 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		spinnerOdo.setMinimum(6);
 
 		Label lbl_13_3 = new Label(this, SWT.NONE);
+		lbl_13_3.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		lbl_13_3.setText("Dérobée");
 		new Label(this, SWT.NONE);
 
 		labelDer = new Label(this, SWT.NONE);
-		labelDer.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		labelDer.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		labelDer.setText("0");
 
 		labelInfos = new Label(this, SWT.NONE);
 		labelInfos.setText("Informations calculées");
-		GridData gridDatainfos = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		GridData gridDatainfos = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gridDatainfos.horizontalAlignment = SWT.FILL;
 		gridDatainfos.verticalAlignment = SWT.FILL;
 		gridDatainfos.horizontalSpan = 5;
 		labelInfos.setLayoutData(gridDatainfos);
 
 		labelInfos2 = new Label(this, SWT.NONE);
-		GridData gridDatainfos2 = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
+		GridData gridDatainfos2 = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gridDatainfos2.horizontalAlignment = SWT.FILL;
 		gridDatainfos2.verticalAlignment = SWT.FILL;
 		gridDatainfos2.horizontalSpan = 5;
@@ -444,6 +482,7 @@ public class RoudoudouCaracSheet extends Composite implements RoudoudouSheet {
 		new Label(this, SWT.NONE);
 
 		btnEnregistrer = new Button(this, SWT.NONE);
+		btnEnregistrer.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		btnEnregistrer.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent arg0) {
