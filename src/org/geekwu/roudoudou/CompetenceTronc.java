@@ -61,26 +61,40 @@ public class CompetenceTronc extends Competence {
 	 */
 	@Override
 	void setValue(int value) {
-		// TODO
+		int oldValue = this.value;
 		super.setValue(value);
 		System.out.println("setValue to " + value);
-		Iterator<CompetenceTronc> i = linkedCompetences.iterator();
-		while (i.hasNext()) {
-			CompetenceTronc l = i.next();
-			if (l.value < 0 && l.value < value) {
-				l.value = value;
-				l.startingLevel = value;
-				System.out.println("raise linked value and starting level");
-			}
-			if (l.value > value) {
-				if (l.startingLevel > value) {
-					System.out.println("lower starting level to " + value);
-					l.startingLevel = value;
+		if (value > 0 || (oldValue > 0 && value == 0))
+			return; // Nothing to do
+		startingLevel = -6;
+		
+		if (oldValue > value) {
+			// Decrease
+			for (Competence comp : linkedCompetences) {
+				if (comp.getTotalXp() == 0) {
+					comp.value = comp.startingLevel = value;
 				}
-				l.value = value;
-				System.out.println("lower linked value to " + value);
 			}
 		}
+		else {
+			// Increase
+			int osl = Math.min(0, getMaxCompetence());
+			for (Competence comp : linkedCompetences) {
+				if (comp.startingLevel < osl) 
+					comp.startingLevel = osl;
+				if (comp.value < comp.startingLevel)
+					comp.value = comp.startingLevel;
+			}
+		}
+	}
+	
+	private int getMaxCompetence() {
+		int max = value;
+		for (Competence comp : linkedCompetences) {
+			if (comp.value > max)
+				max = comp.value;
+		}
+		return max;
 	}
 
 }
