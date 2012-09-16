@@ -63,7 +63,6 @@ public class CompetenceTronc extends Competence {
 	void setValue(int value) {
 		int oldValue = this.value;
 		super.setValue(value);
-		System.out.println("setValue to " + value);
 		if (value > 0 || (oldValue > 0 && value == 0))
 			return; // Nothing to do
 		startingLevel = -6;

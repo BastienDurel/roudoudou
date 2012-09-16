@@ -545,7 +545,6 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		public void widgetSelected(SelectionEvent arg0) {
 			Spinner s = (Spinner) item.getData("spinner");
 			Competence comp = (Competence) item.getData();
-			System.out.println("widgetSelected: " + item + " -> val: " + comp.value + ", start: " + comp.startingLevel);
 			if (s.getMinimum() != comp.startingLevel)
 				s.setMinimum(comp.startingLevel);
 			if (s.getSelection() != comp.value)
