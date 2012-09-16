@@ -209,4 +209,12 @@ public class Personnage implements Serializable {
 	public void setVraiRevant(boolean vrai_revant) {
 		this.vrai_revant = vrai_revant;
 	}
+	
+	public Competence getSurvie() {
+		Competence _survie = Competence.Factory.particuliere(Competence.List.special.SURVIE);
+		if (competences.contains(_survie)) {
+			return competences.get(competences.indexOf(_survie));
+		}
+		return null;
+	}
 }

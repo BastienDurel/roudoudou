@@ -340,6 +340,13 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		case PARTICULIERE:
 			for (int i = 0; i < Competence.List.particuliere.length; ++i)
 				l.add(Competence.Factory.particuliere(Competence.List.particuliere[i]));
+			Competence _survie = Competence.Factory.particuliere(Competence.List.special.SURVIE);
+			Competence survie = l.get(l.indexOf(_survie));
+			if (getEdited().getSurvie() != null) {
+				survie = getEdited().getSurvie();
+			}
+			for (int i = 0; i < Competence.List.survies.length; ++i)
+				l.add(Competence.Factory.survie(Competence.List.survies[i], survie));
 			break;
 
 		case SPECIALISEE:
@@ -371,50 +378,73 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 				l.remove(tmp);
 			}
 		}
-		
+
 		Competence[] c = new Competence[l.size()];
 		Object response;
 		if (s == null)
 			response = new CompSelector(getShell(), getStyle(), l.toArray(c)).open();
 		else {
 			Sort[] sa = new Sort[s.size()];
-			response = new CompSelector(getShell(), getStyle(), l.toArray(c)).setSorts(s.toArray(sa)).open();
+			response = new CompSelector(getShell(), getStyle(), l.toArray(c)).setSorts(s.toArray(sa))
+					.open();
 		}
 		if (response == null)
 			return;
 		if (response instanceof Competence) {
 			Competence comp = (Competence) response;
-			TableItem item = new TableItem(table, SWT.NONE);
-			item.setData(comp);
-			item.setText(comp.name);
-			Spinner spin = new Spinner(table, getStyle());
-			spin.setMaximum(3);
-			spin.setMinimum(comp.value);
-			spin.setSelection(comp.value);
-			TableEditor editor = new TableEditor(table);
-			editor.grabHorizontal = editor.grabVertical = true;
-			editor.setEditor(spin, item, 1);
-			spin.addSelectionListener(new SpinChanger(spin, item));
-			getEdited().competences.add(comp);
-		}
-		else if (response instanceof Sort) {
-			Sort sort = (Sort)response;
+			if (comp instanceof CompetenceSurvie) {
+				// Insert survie competence if not already in list
+				if (getEdited().getSurvie() == null) {
+					insertCompetence(table, ((CompetenceSurvie) comp).survie);
+				}
+			}
+			insertCompetence(table, comp);
+		} else if (response instanceof Sort) {
+			Sort sort = (Sort) response;
 			if (XPSorts() + sort.getXP() > 300) {
 				new MessageBox(getShell(), SWT.ICON_ERROR).open();
 				return;
 			}
 			TableItem item = new TableItem(table, SWT.NONE);
 			item.setData(sort);
-			item.setText(new String[] {sort.getNom(), "", Integer.toString(sort.getXP())});
+			item.setText(new String[] { sort.getNom(), "", Integer.toString(sort.getXP()) });
 			getEdited().sorts.add(sort);
 			updatePerso();
 		}
 	}
 
+	protected TableItem insertCompetence(Table table, Competence comp) {
+		TableItem item = new TableItem(table, SWT.NONE);
+		item.setData(comp);
+		item.setText(comp.name);
+		Spinner spin = new Spinner(table, getStyle());
+		spin.setMinimum(comp.value);
+		spin.setSelection(comp.value);
+		spin.setMaximum(3);
+		if (comp instanceof CompetenceSurvie) {
+			spin.setMaximum(((CompetenceSurvie) comp).getMax());
+			// link spinner to survie
+			Iterator<SpinChanger> i = _spinChangers.iterator();
+			while (i.hasNext()) {
+				SpinChanger s = i.next();
+				if (s.getComp().equals(getEdited().getSurvie())) {
+					s.spin.addSelectionListener(new SurvieSpinChanger(spin, item));
+					break;
+				}
+			}
+		}
+		TableEditor editor = new TableEditor(table);
+		editor.grabHorizontal = editor.grabVertical = true;
+		editor.setEditor(spin, item, 1);
+		spin.addSelectionListener(new SpinChanger(spin, item));
+		getEdited().competences.add(comp);
+		return item;
+	}
+
 	protected int totalXP() {
 		return XPCompetences() + XPSorts();
 	}
-	
+
 	protected int XPCompetences() {
 		int xp = 0;
 		Iterator<Competence> i = getEdited().competences.iterator();
@@ -431,6 +461,8 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		return xp;
 	}
 
+	private List<SpinChanger> _spinChangers = new Vector<RoudoudouCompSheet.SpinChanger>();
+
 	private class SpinChanger extends SelectionAdapter {
 		TableItem item;
 
@@ -440,6 +472,7 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 			super();
 			this.spin = spin;
 			this.item = item;
+			_spinChangers.add(this);
 		}
 
 		@Override
@@ -449,5 +482,27 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 			item.setText(2, Integer.toString(comp.getTotalXp()));
 			updatePerso();
 		}
+
+		public Competence getComp() {
+			return (Competence) item.getData();
+		}
+	}
+
+	private class SurvieSpinChanger extends SelectionAdapter {
+		Spinner linked;
+
+		TableItem item;
+
+		SurvieSpinChanger(Spinner spin, TableItem item) {
+			this.linked = spin;
+			this.item = item;
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent arg0) {
+			CompetenceSurvie comp = (CompetenceSurvie) item.getData();
+			linked.setMaximum(comp.getMax());
+		}
+
 	}
 }

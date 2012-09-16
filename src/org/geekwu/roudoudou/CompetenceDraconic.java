@@ -20,18 +20,20 @@ package org.geekwu.roudoudou;
 
 /**
  * @author Bastien Durel
- *
+ * 
  */
 public class CompetenceDraconic extends Competence {
 	private static final long serialVersionUID = -6301110191864466130L;
+
 	/**
 	 * Destroys XP when level is gained
 	 */
 	boolean destroyer = false;
+
 	public boolean isDestroyer() {
 		return destroyer;
 	}
-	
+
 	CompetenceDraconic(int value, String name, boolean destroyer) {
 		super(value, name);
 		this.destroyer = destroyer;
@@ -42,6 +44,24 @@ public class CompetenceDraconic extends Competence {
 		if (destroyer)
 			return super.getTotalXp() * 2;
 		return super.getTotalXp();
+	}
+
+	public void looseXP(int xp) throws Exception {
+		if (getTotalXp() < xp)
+			throw new Exception("Impossible de réduire l'XP: niveau pas assez élevé");
+		int _xp = this.xp;
+		int _value = this.value;
+		this.xp -= xp;
+		while (this.xp < 0) {
+			value--;
+			this.xp += getNextStep();
+			if (value < -11) {
+				// double-check
+				this.xp = _xp;
+				this.value = _value;
+				throw new Exception("Impossible de réduire l'XP: niveau pas assez élevé");
+			}
+		}
 	}
 
 }

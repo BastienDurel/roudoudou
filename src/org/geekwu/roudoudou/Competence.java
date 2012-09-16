@@ -73,7 +73,13 @@ public class Competence extends Entrainable {
 	public static class List {
 
 		public static class special {
-			public static String THANATOS = "thanatos";
+			public static String THANATOS = "Thanatos";
+
+			public static String SURVIE = "Survie en extérieur";
+
+			public static String[][] TRONC = { { "Esquive", "Dague", "Corps-à-corps" },
+					{ "Épée à une main", "Épée à deux mains" }, { "Hache à une main", "Hache à deux mains" },
+					{ "Masse à une main", "Masse à deux mains" } };
 		}
 
 		public static String generale[] = { "Bricolage", "Chant", "Course", "Cuisine", "Danse",
@@ -87,8 +93,7 @@ public class Competence extends Entrainable {
 				"Fouet" };
 
 		public static String particuliere[] = { "Charpenterie", "Comédie", "Commerce", "Équitation",
-				"Maçonnerie", "Musique", "Pickpocket", "Survie en cité", "Survie en extérieur",
-				"Travestissement" };
+				"Maçonnerie", "Musique", "Pickpocket", "Survie en cité", special.SURVIE, "Travestissement" };
 
 		public static String survies[] = { "Survie en Désert", "Survie en Forêt", "Survie en Glaces",
 				"Survie en Marais", "Survie en Montagne", "Survie en Sous-sol" };
@@ -109,6 +114,10 @@ public class Competence extends Entrainable {
 
 		public static Competence particuliere(String name) {
 			return new Competence(-8, name);
+		}
+
+		public static Competence survie(String name, Competence survie) {
+			return new CompetenceSurvie(-8, name, survie);
 		}
 
 		public static Competence specialisee(String name) {
@@ -151,8 +160,10 @@ public class Competence extends Entrainable {
 			result += getNextStep(i);
 		return result + xp;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
