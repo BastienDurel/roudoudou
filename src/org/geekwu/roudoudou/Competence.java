@@ -1,5 +1,7 @@
 package org.geekwu.roudoudou;
 
+import org.geekwu.roudoudou.Competence.List.special;
+
 public class Competence extends Entrainable {
 	private static final long serialVersionUID = -2488662389931928082L;
 
@@ -137,6 +139,21 @@ public class Competence extends Entrainable {
 		}
 
 		public static Competence combat(String name) {
+			for (int i = 0; i < special.TRONC.length; ++i) {
+				for (int j = 0; j < special.TRONC[i].length; ++j) {
+					if (name.equals(special.TRONC[i][j])) {
+						CompetenceTronc tronc = new CompetenceTronc(-6, name, null);
+						for (int k = 0; k < special.TRONC[i].length; ++k) {
+							if (k == j)
+								continue;
+							CompetenceTronc link = new CompetenceTronc(-6, special.TRONC[i][k],
+									tronc.linkedCompetences);
+							link.addLink(tronc);
+						}
+						return tronc;
+					}
+				}
+			}
 			return new Competence(-6, name);
 		}
 
@@ -171,6 +188,10 @@ public class Competence extends Entrainable {
 		if (obj instanceof Competence)
 			return name.equals(((Competence) obj).name);
 		return super.equals(obj);
+	}
+
+	void setValue(int value) {
+		this.value = value;
 	}
 
 }

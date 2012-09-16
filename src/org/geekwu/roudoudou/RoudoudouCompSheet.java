@@ -326,8 +326,17 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		List<Sort> s = null;
 		switch (type) {
 		case COMBAT:
-			for (int i = 0; i < Competence.List.corps_a_corps.length; ++i)
-				l.add(Competence.Factory.combat(Competence.List.corps_a_corps[i]));
+			for (int i = 0; i < Competence.List.corps_a_corps.length; ++i) {
+				Competence tmp = Competence.Factory.combat(Competence.List.corps_a_corps[i]);
+				if (l.contains(tmp))
+					continue;
+				l.add(tmp);
+				if (tmp instanceof CompetenceTronc) {
+					Iterator<CompetenceTronc> link = ((CompetenceTronc) tmp).linkedCompetences.iterator();
+					while (link.hasNext())
+						l.add(link.next());
+				}
+			}
 			for (int i = 0; i < Competence.List.tir.length; ++i)
 				l.add(Competence.Factory.tir(Competence.List.tir[i]));
 			break;
@@ -398,7 +407,25 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 					insertCompetence(table, ((CompetenceSurvie) comp).survie);
 				}
 			}
-			insertCompetence(table, comp);
+			TableItem item = insertCompetence(table, comp);
+			if (comp instanceof CompetenceTronc) {
+				List<TableItem> items = new Vector<TableItem>();
+				items.add(item);
+				CompetenceTronc t = (CompetenceTronc)comp;
+				Iterator<CompetenceTronc> it = t.linkedCompetences.iterator();
+				while (it.hasNext()) {
+					TableItem item2 = insertCompetence(table, it.next());
+					items.add(item2);
+				}
+				for (TableItem tableItem : items) {
+					for (TableItem tableItem2 : items) {
+						if (tableItem == tableItem2)
+							continue;
+						Spinner sp = (Spinner) tableItem.getData("spinner");
+						sp.addSelectionListener(new TroncSpinChanger(tableItem2));
+					}
+				}
+			}
 		} else if (response instanceof Sort) {
 			Sort sort = (Sort) response;
 			if (XPSorts() + sort.getXP() > 300) {
@@ -438,6 +465,7 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		editor.setEditor(spin, item, 1);
 		spin.addSelectionListener(new SpinChanger(spin, item));
 		getEdited().competences.add(comp);
+		item.setData("spinner", spin);
 		return item;
 	}
 
@@ -478,7 +506,7 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		@Override
 		public void widgetSelected(SelectionEvent arg0) {
 			Competence comp = (Competence) item.getData();
-			comp.value = spin.getSelection();
+			comp.setValue(spin.getSelection());
 			item.setText(2, Integer.toString(comp.getTotalXp()));
 			updatePerso();
 		}
@@ -502,6 +530,28 @@ public class RoudoudouCompSheet extends Composite implements RoudoudouSheet {
 		public void widgetSelected(SelectionEvent arg0) {
 			CompetenceSurvie comp = (CompetenceSurvie) item.getData();
 			linked.setMaximum(comp.getMax());
+		}
+
+	}
+
+	private class TroncSpinChanger extends SelectionAdapter {
+		TableItem item;
+
+		TroncSpinChanger(TableItem item) {
+			this.item = item;
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent arg0) {
+			Spinner s = (Spinner) item.getData("spinner");
+			Competence comp = (Competence) item.getData();
+			System.out.println("widgetSelected: " + item + " -> val: " + comp.value + ", start: " + comp.startingLevel);
+			if (s.getMinimum() != comp.startingLevel)
+				s.setMinimum(comp.startingLevel);
+			if (s.getSelection() != comp.value)
+				s.setSelection(comp.value);
+			item.setText(2, Integer.toString(comp.getTotalXp()));
+			updatePerso();
 		}
 
 	}
